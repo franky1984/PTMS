@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "薪资核算统计";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<div class="lr-form-wrap">
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_TJ2" >
+        <div class="lr-form-item-title">活动名称</div>
+        <input id="F_MeetingName" type="text" class="form-control"  />
+    </div>
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_TJ2" >
+        <div class="lr-form-item-title">单位名称</div>
+        <input id="F_EmployerName" type="text" class="form-control"  />
+    </div>
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_TJ2" >
+        <div class="lr-form-item-title">总人数</div>
+        <input id="sumPeople" type="text" class="form-control"  />
+    </div>
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_TJ2" >
+        <div class="lr-form-item-title">开始时间</div>
+        <input id="F_StartTime" type="text" class="form-control"  />
+    </div>
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_TJ2" >
+        <div class="lr-form-item-title">结束时间</div>
+        <input id="F_EndTime" type="text" class="form-control"  />
+    </div>
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_TJ2" >
+        <div class="lr-form-item-title">工作日(总)</div>
+        <input id="sumWorkday" type="text" class="form-control"  />
+    </div>
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_TJ2" >
+        <div class="lr-form-item-title">应发工资</div>
+        <input id="f_shouldDaysalary" type="text" class="form-control"  />
+    </div>
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_TJ2" >
+        <div class="lr-form-item-title">实发工资</div>
+        <input id="f_realDaySalary" type="text" class="form-control"  />
+    </div>
+</div>
+@Html.AppendJsFile("/Areas/LR_CodeDemo/Views/payTJ/Form.js")

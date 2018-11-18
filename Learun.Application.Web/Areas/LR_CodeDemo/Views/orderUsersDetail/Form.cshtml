@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "订单人员明细管理";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<div class="lr-form-wrap">
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_TempUser" >
+        <div class="lr-form-item-title">姓名<font face="宋体">*</font></div>
+        <input id="F_RealName" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_TempUser" >
+        <div class="lr-form-item-title">性别<font face="宋体">*</font></div>
+        <div id="F_Gender"  isvalid="yes" checkexpession="NotNull" ></div>
+    </div>
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_TempUser" >
+        <div class="lr-form-item-title">身份证号<font face="宋体">*</font></div>
+        <input id="F_Identity" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_TempUser" >
+        <div class="lr-form-item-title">工种<font face="宋体">*</font></div>
+        <div id="F_EmployerTypeId" isvalid="yes" checkexpession="NotNull" ></div>
+    </div>
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_TempUser" >
+        <div class="lr-form-item-title">联系方式<font face="宋体">*</font></div>
+        <input id="F_Mobile" type="text" class="form-control" isvalid="yes" checkexpession="Mobile" />
+    </div>
+</div>
+@Html.AppendJsFile("/Areas/LR_CodeDemo/Views/orderUsersDetail/Form.js")

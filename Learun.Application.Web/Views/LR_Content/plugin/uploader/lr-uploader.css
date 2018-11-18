@@ -1,0 +1,35 @@
+﻿/*
+ * 版 本  V7.0.0 山东众数敏捷开 发 框架(http://www.zoshu.cn/)
+ * Copyright (c) 2013-2018 山东众数 信息技术有限公司
+ * 创建人：山东众数-前端开发组
+ * 日 期：2017.05.24
+ * 描 述：lr-uploader 是对百度webuploader的封装
+ */
+
+.lrUploader-wrap {
+    position:relative;
+    height:30px;
+    width:100%;
+    padding-right:118px;
+}
+
+.lrUploader-input {
+    position:relative;
+    height:100%;
+    line-height:28px;
+    width:100%;
+    border:1px solid #ccc;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    padding-left:10px;
+}
+.lrUploader-btn-group {
+    position:absolute;
+    top:0;
+    right:0;
+}
+.lrUploader-input-btn {
+    padding:4px 12px; 
+    margin-left:5px;
+}

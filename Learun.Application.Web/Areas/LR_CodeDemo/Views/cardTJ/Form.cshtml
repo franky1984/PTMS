@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "打卡统计";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<div class="lr-form-wrap">
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_CardTJ" >
+        <div class="lr-form-item-title">活动名称</div>
+        <input id="F_MeetingName" type="text" class="form-control"  />
+    </div>
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_CardTJ" >
+        <div class="lr-form-item-title">单位名称</div>
+        <input id="f_employername" type="text" class="form-control"  />
+    </div>
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_CardTJ" >
+        <div class="lr-form-item-title">姓名</div>
+        <input id="f_realname" type="text" class="form-control"  />
+    </div>
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_CardTJ" >
+        <div class="lr-form-item-title">性别</div>
+        <input id="f_gender" type="text" class="form-control"  />
+    </div>
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_CardTJ" >
+        <div class="lr-form-item-title">身份证号</div>
+        <input id="f_identity" type="text" class="form-control"  />
+    </div>
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_CardTJ" >
+        <div class="lr-form-item-title">工种价格</div>
+        <input id="f_price" type="text" class="form-control"  />
+    </div>
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_CardTJ" >
+        <div class="lr-form-item-title">打卡总数</div>
+        <input id="f_cardNum" type="text" class="form-control"  />
+    </div>
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_CardTJ" >
+        <div class="lr-form-item-title">正常</div>
+        <input id="f_normal" type="text" class="form-control"  />
+    </div>
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_CardTJ" >
+        <div class="lr-form-item-title">迟到</div>
+        <input id="f_late" type="text" class="form-control"  />
+    </div>
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_CardTJ" >
+        <div class="lr-form-item-title">旷工</div>
+        <input id="f_absenteeism" type="text" class="form-control"  />
+    </div>
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_CardTJ" >
+        <div class="lr-form-item-title">实发工资</div>
+        <input id="f_realSalary" type="text" class="form-control"  />
+    </div>
+</div>
+@Html.AppendJsFile("/Areas/LR_CodeDemo/Views/cardTJ/Form.js")
