@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "用人单位管理";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<div class="lr-form-wrap">
+    <div class="col-xs-12 lr-form-item"  data-table="F_Base_Employer" >
+        <div class="lr-form-item-title">单位名称<font face="宋体">*</font></div>
+        <input id="F_EmployerName" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item"  data-table="F_Base_Employer" >
+        <div class="lr-form-item-title">规模<font face="宋体">*</font></div>
+        <input id="F_Scale" type="text" class="form-control" isvalid="yes" checkexpession="Num" />
+    </div>
+    <div class="col-xs-12 lr-form-item"  data-table="F_Base_Employer" >
+        <div class="lr-form-item-title">联系人<font face="宋体">*</font></div>
+        <input id="F_Contacts" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+    </div>
+    <div class="col-xs-12 lr-form-item"  data-table="F_Base_Employer" >
+        <div class="lr-form-item-title">联系方式<font face="宋体">*</font></div>
+        <input id="F_Phone" type="text" class="form-control" isvalid="yes" checkexpession="Mobile" />
+    </div>
+</div>
+@Html.AppendJsFile("/Areas/LR_CodeDemo/Views/employer/Form.js")

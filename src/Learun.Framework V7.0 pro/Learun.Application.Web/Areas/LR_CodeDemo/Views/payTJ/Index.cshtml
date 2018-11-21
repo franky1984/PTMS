@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "薪资核算统计";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<div class="lr-layout">
+    <div class="lr-layout-center">
+        <div class="lr-layout-wrap lr-layout-wrap-notitle ">
+            <div class="lr-layout-tool">
+                <div class="lr-layout-tool-left">
+                    @* <div class="lr-layout-tool-item"> *@
+                    @*     <div id="multiple_condition_query"> *@
+                    @*         <div class="lr-query-formcontent"> *@
+                    @*             <div class="col-xs-12 lr-form-item"> *@
+                    @*                 <div class="lr-form-item-title">活动名称</div> *@
+                    @*                 <div id="F_OrderId"></div> *@
+                    @*             </div> *@
+                    @*         </div> *@
+                    @*     </div> *@
+                    @* </div> *@
+                </div>
+                <div class="lr-layout-tool-right">
+                    <div class=" btn-group btn-group-sm">
+                        <a id="lr_refresh" class="btn btn-default"><i class="fa fa-refresh"></i></a>
+                    </div>
+
+                </div>
+            </div>
+            <div class="lr-layout-body" id="gridtable"></div>
+        </div>
+    </div>
+</div>
+@Html.AppendJsFile("/Areas/LR_CodeDemo/Views/payTJ/Index.js")

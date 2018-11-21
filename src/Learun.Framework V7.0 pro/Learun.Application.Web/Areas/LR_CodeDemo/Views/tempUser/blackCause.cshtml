@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewBag.Title = "工人管理";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<div class="lr-form-wrap" id="form">
+    <div class="col-xs-12 lr-form-item" data-table="LR_Base_TempUser">
+        <div class="lr-form-item-title">原因：<font face="宋体">*</font></div>
+        <textarea id="F_Cause" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" style="height:90px;"></textarea>
+    </div>
+
+</div>
+@Html.AppendJsFile( "/Areas/LR_CodeDemo/Views/tempUser/blackCause.js" )
+

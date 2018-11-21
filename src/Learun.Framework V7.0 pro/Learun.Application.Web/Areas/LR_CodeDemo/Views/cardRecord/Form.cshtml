@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.Title = "打卡管理";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<div class="lr-form-wrap">
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_CardRecord" >
+        <div class="lr-form-item-title">订单</div>
+        <div id="F_OrderId"  ></div>
+    </div>
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_CardRecord" >
+        <div class="lr-form-item-title">姓名</div>
+        <input id="F_RealName" type="text" class="form-control"  />
+    </div>
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_CardRecord" >
+        <div class="lr-form-item-title">性别</div>
+        <div id="F_Gender"  ></div>
+    </div>
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_CardRecord" >
+        <div class="lr-form-item-title">身份证号</div>
+        <input id="F_Identity" type="text" class="form-control"  />
+    </div>
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_CardRecord" >
+        <div class="lr-form-item-title">第一次打卡</div>
+        <input id="F_First" type="text" class="form-control"  />
+    </div>
+    <div class="col-xs-12 lr-form-item"  data-table="LR_Base_CardRecord" >
+        <div class="lr-form-item-title">第二次打卡</div>
+        <input id="F_Second" type="text" class="form-control"  />
+    </div>
+</div>
+@Html.AppendJsFile("/Areas/LR_CodeDemo/Views/cardRecord/Form.js")
