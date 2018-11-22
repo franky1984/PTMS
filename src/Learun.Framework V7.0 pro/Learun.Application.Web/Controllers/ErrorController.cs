@@ -23,7 +23,7 @@ namespace Learun.Application.Web.Controllers
         public ActionResult ErrorMessage(string message)
         {
             Dictionary<string, string> modulesError = (Dictionary<string, string>)HttpContext.Application["error"];
-            ViewData["Message"] = modulesError;
+            ViewData["Message"] = modulesError; 
             return View();
         }
         /// <summary>
