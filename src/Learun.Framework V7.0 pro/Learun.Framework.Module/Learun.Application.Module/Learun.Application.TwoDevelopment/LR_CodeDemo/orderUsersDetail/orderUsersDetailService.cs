@@ -91,11 +91,18 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
         /// <param name="keyValue">主键</param>
         /// <summary>
         /// <returns></returns>
-        public LR_Base_TempUserEntity GetLR_Base_TempUserEntity(string keyValue)
+        public LR_Base_TempUserEntity GetLR_Base_TempUserEntity(string keyValue, string orderID )
         {
             try
             {
-                return this.BaseRepository().FindEntity<LR_Base_TempUserEntity>(keyValue);
+                var dp = new DynamicParameters(new { });
+                dp.Add("userID", keyValue, DbType.String);
+                dp.Add("orderID", orderID, DbType.String);
+
+                string type                 = this.BaseRepository().FindObject("SELECT F_CategoryId FROM F_Base_TempWorkOrderUserDetail WHERE F_UserId=@userID AND F_TempWorkOrderId=@orderID", dp ).ToString();
+                LR_Base_TempUserEntity info = this.BaseRepository().FindEntity<LR_Base_TempUserEntity>(keyValue);
+                info.F_EmployerTypeId       = type;
+                return info;
             }
             catch (Exception ex)
             {
@@ -131,18 +138,23 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
                 //物理删除临时工与订单关联细表
                 this.BaseRepository().ExecuteBySql("DELETE F_Base_TempWorkOrderUserDetail WHERE f_userid=@userid AND F_TempWorkOrderId=@orderid",dp);
 
-                int num = Convert.ToInt32( this.BaseRepository().FindObject( "SELECT COUNT(*) FROM F_Base_TempWorkOrderUserDetail WHERE f_userid=@userid AND F_TempWorkOrderId != @orderid", dp ) );
+                string identity = this.BaseRepository().FindObject("SELECT f_identity FROM LR_Base_TempUser WHERE f_userid='" + keyValue + "'" ).ToString();
 
-                //如果临时工在其它订单里没有出现过，那直接在用户大表中物理删除掉
-                if( num <= 0 )
-                {
-                    var dp2 = new DynamicParameters( new
-                    {
-                    } );
-                    dp2.Add( "userid", keyValue, DbType.String );
+                //同时删除这个小时工的打卡记录
+                this.BaseRepository().ExecuteBySql("DELETE LR_Base_CardRecord WHERE f_identity='" + identity + "' AND f_orderid='" + orderID + "'", dp);
 
-                    this.BaseRepository().ExecuteBySql( "DELETE LR_Base_TempUser WHERE f_userid=@userid",dp2 );
-                }
+                //                int num = Convert.ToInt32( this.BaseRepository().FindObject( "SELECT COUNT(*) FROM F_Base_TempWorkOrderUserDetail WHERE f_userid=@userid AND F_TempWorkOrderId != @orderid", dp ) );
+                //
+                //                //如果临时工在其它订单里没有出现过，那直接在用户大表中物理删除掉
+                //                if( num <= 0 )
+                //                {
+                //                    var dp2 = new DynamicParameters( new
+                //                    {
+                //                    } );
+                //                    dp2.Add( "userid", keyValue, DbType.String );
+                //
+                //                    this.BaseRepository().ExecuteBySql( "DELETE LR_Base_TempUser WHERE f_userid=@userid",dp2 );
+                //                }
             }
             catch (Exception ex)
             {
@@ -210,7 +222,7 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
                     //用身份证判断用户是否存在大表中，如果存在直接修改临时工表数据(因为用户基本信息是通用一样的，只有工种是挂在每个订单下)。
                     if (userid != null && (string)userid != string.Empty )
                     {
-                        //entity.Modify( (string)userid );
+                        entity.Modify( (string)userid );
                         
                         var dp2 = new DynamicParameters( new
                         {
@@ -225,11 +237,11 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
                         {
                             checkError = 2;  //代表该订单已经包含该临时工
                         }
-//                        else
-//                        {
-//                            //修改临时工大表
-//                            this.BaseRepository().Update( entity );
-//                        }
+                        else
+                        {
+                            //修改临时工大表
+                            this.BaseRepository().Update( entity );
+                        }
                     }
                     else
                     {

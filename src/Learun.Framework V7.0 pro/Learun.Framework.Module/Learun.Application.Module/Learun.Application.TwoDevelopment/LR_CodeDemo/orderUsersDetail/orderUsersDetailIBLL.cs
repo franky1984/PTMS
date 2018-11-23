@@ -26,7 +26,7 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
         /// <param name="keyValue">主键</param>
         /// <summary>
         /// <returns></returns>
-        LR_Base_TempUserEntity GetLR_Base_TempUserEntity(string keyValue);
+        LR_Base_TempUserEntity GetLR_Base_TempUserEntity(string keyValue, string orderID="");
         #endregion
 
         #region 提交数据

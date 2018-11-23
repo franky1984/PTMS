@@ -47,11 +47,11 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
         /// <param name="keyValue">主键</param>
         /// <summary>
         /// <returns></returns>
-        public LR_Base_TempUserEntity GetLR_Base_TempUserEntity(string keyValue)
+        public LR_Base_TempUserEntity GetLR_Base_TempUserEntity(string keyValue, string orderID="" )
         {
             try
             {
-                return orderUsersDetailService.GetLR_Base_TempUserEntity(keyValue);
+                return orderUsersDetailService.GetLR_Base_TempUserEntity(keyValue, orderID );
             }
             catch (Exception ex)
             {

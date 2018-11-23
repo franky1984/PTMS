@@ -24,7 +24,7 @@ var bootstrap = function ($, learun) {
         },
         initData: function () {
             if (!!keyValue) {
-                $.lrSetForm(top.$.rootUrl + '/LR_CodeDemo/orderUsersDetail/GetFormData?keyValue=' + keyValue, function (data) {
+                $.lrSetForm(top.$.rootUrl + '/LR_CodeDemo/orderUsersDetail/GetFormData?keyValue=' + keyValue + "&orderID=" + orderID, function (data) {
                     for (var id in data) {
                         if (!!data[id].length && data[id].length > 0) {
                             $('#' + id).jfGridSet('refreshdata', data[id]);
