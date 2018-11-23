@@ -33,12 +33,12 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
                 strSql.Append( @"
                 t.F_BlackId,
                 t.F_Cause,
-                u.F_RealName
+                u.F_RealName,
                 t.F_CreateTime,
                 employer.F_EmployerName
                 " );
-                strSql.Append( " FROM F_Base_BlackList t INNER JOIN LR_Base_User user ON t.F_CreateUser=user.f_userID INNER JOIN LR_Base_TempUser u ON t.F_TempUserId=u.F_UserId LEFT JOIN F_Base_Employer employer ON u.F_EmployerId=employer.F_EmployerId" );
-                strSql.Append( "  WHERE u.F_CompanyId=@companyID AND 1=1 " );
+                strSql.Append( " FROM F_Base_BlackList t INNER JOIN LR_Base_User o ON t.F_CreateUser=o.f_userID INNER JOIN LR_Base_TempUser u ON t.F_TempUserId=u.F_UserId LEFT JOIN F_Base_Employer employer ON u.F_EmployerId=employer.F_EmployerId" );
+                strSql.Append( "  WHERE o.F_CompanyId=@companyID AND 1=1 " );
                 var queryParam = queryJson.ToJObject();
                 // 虚拟参数
                 var dp = new DynamicParameters(new { });

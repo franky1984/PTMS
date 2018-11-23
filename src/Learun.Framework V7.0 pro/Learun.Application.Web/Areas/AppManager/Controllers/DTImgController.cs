@@ -135,7 +135,8 @@ namespace Learun.Application.Web.Areas.AppManager.Controllers
             entity.F_FileName = FileEextension;
             dTImgIBLL.SaveEntity(keyValue, entity);
 
-            string fileHeadImg = Config.GetValue("fileAppDTImg");
+            //保存健康证明
+            string fileHeadImg  = Config.GetValue("fileHealthImg"); //Config.GetValue("fileAppDTImg");
             string fullFileName = string.Format("{0}/{1}{2}", fileHeadImg, entity.F_Id, FileEextension);
 
            

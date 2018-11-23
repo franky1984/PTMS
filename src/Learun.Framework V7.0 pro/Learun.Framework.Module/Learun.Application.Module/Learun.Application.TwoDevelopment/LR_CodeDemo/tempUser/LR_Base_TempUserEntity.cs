@@ -19,6 +19,12 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
         /// </summary>
         [Column("F_USERID")]
         public string F_UserId { get; set; }
+
+        /// <summary>
+        /// F_CreateUser
+        /// </summary>
+        [Column("F_CreateUser")]
+        public string F_CreateUser { get; set; }
         /// <summary>
         /// F_EnCode
         /// </summary>
@@ -79,6 +85,16 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
             get; set;
         }
 
+        /// <summary> 
+        /// 图片文件名 
+        /// </summary> 
+        /// <returns></returns> 
+        [Column( "F_FILENAME" )]
+        public string F_FileName
+        {
+            get; set;
+        }
+
         /// <summary>
         /// 被替人
         /// </summary>
@@ -96,6 +112,8 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
         public void Create()
         {
             this.F_UserId      = Guid.NewGuid().ToString();
+            this.F_CreateUser  = LoginUserInfo.Get().userId;
+            this.F_CreateTime  = DateTime.Now;
             this.F_EnabledMark = 1;  //默认都是启用状态 
         }
         /// <summary>

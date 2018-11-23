@@ -40,7 +40,7 @@ var bootstrap = function ($, learun) {
                         title: '新增',
                         url: top.$.rootUrl + '/LR_CodeDemo/orderUsersDetail/Form?orderID=' + orderID,
                         width: 600,
-                        height: 400,
+                        height: 500,
                         callBack: function (id) {
                             return top[id].acceptClick(refreshGirdData);
                         }
@@ -95,7 +95,7 @@ var bootstrap = function ($, learun) {
                         title: '编辑',
                         url: top.$.rootUrl + '/LR_CodeDemo/orderUsersDetail/Form?keyValue=' + keyValue + "&orderID=" + orderID,
                         width: 600,
-                        height: 400,
+                        height: 500,
                         callBack: function (id) {
                             return top[id].acceptClick(refreshGirdData);
                         }

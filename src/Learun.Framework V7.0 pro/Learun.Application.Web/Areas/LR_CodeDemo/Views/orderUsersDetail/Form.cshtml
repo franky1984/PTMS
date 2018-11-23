@@ -2,7 +2,8 @@
     ViewBag.Title = "订单人员明细管理";
     Layout = "~/Views/Shared/_Form.cshtml";
 }
-<div class="lr-form-wrap">
+@Html.AppendCssFile( "/Areas/AppManager/Views/DTImg/Form.css" )
+<div class="lr-form-wrap"  id="form">
     <div class="col-xs-12 lr-form-item"  data-table="LR_Base_TempUser" >
         <div class="lr-form-item-title">姓名<font face="宋体">*</font></div>
         <input id="F_RealName" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
@@ -23,5 +24,14 @@
         <div class="lr-form-item-title">联系方式<font face="宋体">*</font></div>
         <input id="F_Mobile" type="text" class="form-control" isvalid="yes" checkexpession="Mobile" />
     </div>
+    <div class="col-xs-12" style="padding-left: 100px;">
+        <div class="lr-form-item-title">健康证照片上传<font face="宋体">*</font></div>
+        <div class="file">
+            <input type="file" name="uploadFile" id="uploadFile">
+        </div>
+        <div class="text">
+            上传图片尺寸为32*26，大小不超过1M。
+        </div>
+    </div>
 </div>
-@Html.AppendJsFile("/Areas/LR_CodeDemo/Views/orderUsersDetail/Form.js")
+@Html.AppendJsFile( "/Views/LR_Content/script/lr-fileupload.js", "/Areas/LR_CodeDemo/Views/orderUsersDetail/Form.js" )

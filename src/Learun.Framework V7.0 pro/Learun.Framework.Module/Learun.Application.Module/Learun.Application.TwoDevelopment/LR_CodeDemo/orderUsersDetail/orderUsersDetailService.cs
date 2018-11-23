@@ -180,27 +180,10 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
 
                     //修改该 临时工 在特定订单里的工种类型 
                     this.BaseRepository().ExecuteBySql("UPDATE F_Base_TempWorkOrderUserDetail SET F_CategoryId=@type WHERE F_TempWorkOrderId=@orderid AND f_userid=@userid", dp);
-                    //同时修改 替工者 的工种类型
-                    this.BaseRepository().ExecuteBySql( "UPDATE F_Base_TempWorkOrderUserDetail SET F_CategoryId=@type WHERE F_TempWorkOrderId=@orderid AND F_Replacement=@userid", dp );
 
                     dp = new DynamicParameters( new{} );
                     dp.Add( "userid", keyValue, DbType.String );
                     dp.Add( "orderid", orderID, DbType.String );
-
-                    object checkReplacement  = this.BaseRepository().FindObject( "SELECT F_Replacement FROM F_Base_TempWorkOrderUserDetail WHERE F_WorkSubstitute=1 AND f_userid=@userid AND F_TempWorkOrderId=@orderid", dp );
-
-                    //判断临时工是不是替工
-                    if( checkReplacement != null && !string.IsNullOrEmpty( (string)checkReplacement ) )
-                    {
-                        dp = new DynamicParameters( new
-                        {
-                        } );
-                        dp.Add( "orderid", orderID, DbType.String );
-                        dp.Add( "type", entity.F_EmployerTypeId, DbType.String );
-                        dp.Add( "userid", (string)checkReplacement, DbType.String );
-
-                        this.BaseRepository().ExecuteBySql( "UPDATE F_Base_TempWorkOrderUserDetail SET F_CategoryId=@type WHERE F_TempWorkOrderId=@orderid AND f_userid=@userid", dp );
-                    }
 
                     entity.F_EmployerTypeId = string.Empty;
                     //修改临时工基本信息（大表）
@@ -212,41 +195,41 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
                     {
                     } );
                     dp.Add( "identity", entity.F_Identity, DbType.String );
-                    //从大表获取新添加临时工的身份证
+                    //首先从大表获取新将要添加的小时工数据，用于判断该小时工是否以前已经存在
                     object userid           = this.BaseRepository().FindObject( "SELECT f_userid AS num FROM LR_Base_TempUser WHERE F_Identity=@identity", dp );
                     
                     dp = new DynamicParameters( new
                     {
                     } );
                     dp.Add( "orderID", orderID, DbType.String );
-                    //根据订单ID获取用人单位ID
-                    entity.F_EmployerId     = this.BaseRepository().FindObject( "SELECT F_EmployerId AS employerID FROM F_Base_TempWorkOrder WHERE f_orderid=@orderID", dp ).ToString();
+                    //根据订单ID获取劳务公司ID
+                    entity.F_EmployerId     = this.BaseRepository().FindObject( "SELECT F_EmployerId FROM F_Base_TempWorkOrder WHERE f_orderid=@orderID", dp ).ToString();
                     string type             = entity.F_EmployerTypeId;
                     entity.F_EmployerTypeId = string.Empty;
 
                     //用身份证判断用户是否存在大表中，如果存在直接修改临时工表数据(因为用户基本信息是通用一样的，只有工种是挂在每个订单下)。
                     if (userid != null && (string)userid != string.Empty )
                     {
-                        entity.Modify( (string)userid );
+                        //entity.Modify( (string)userid );
                         
-                        // 虚拟参数
                         var dp2 = new DynamicParameters( new
                         {
                         } );
                         dp2.Add( "userID", (string)userid, DbType.String );
                         dp2.Add( "orderID", orderID, DbType.String );
 
+                        //判断该小时工是否已在本次活动中
                         int num = Convert.ToInt32( this.BaseRepository().FindObject( "SELECT COUNT(*) FROM F_Base_TempWorkOrderUserDetail WHERE f_userid=@userID AND F_TempWorkOrderId=@orderID", dp2 ) );
 
                         if( num > 0 )
                         {
                             checkError = 2;  //代表该订单已经包含该临时工
                         }
-                        else
-                        {
-                            //修改临时工大表
-                            this.BaseRepository().Update( entity );
-                        }
+//                        else
+//                        {
+//                            //修改临时工大表
+//                            this.BaseRepository().Update( entity );
+//                        }
                     }
                     else
                     {
@@ -281,7 +264,7 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
                         DateTime startTime = DateTime.Parse(dt.Rows[0]["F_StartTime"].ToString());
                         DateTime endTime   = DateTime.Parse(dt.Rows[0]["F_EndTime"].ToString());
 
-                        for ( DateTime t = startTime; t <= endTime; t.AddDays(1) )
+                        for ( DateTime t = startTime; t <= endTime; t=t.AddDays(1) )
                         {
                             // 虚拟参数
                             var dp2 = new DynamicParameters(new

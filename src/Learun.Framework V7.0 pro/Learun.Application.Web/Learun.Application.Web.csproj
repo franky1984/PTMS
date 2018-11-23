@@ -288,6 +288,7 @@
     <Content Include="Areas\LR_CodeDemo\Views\GridDemo\CommonIndex.js" />
     <Content Include="Areas\LR_CodeDemo\Views\GridDemo\EditIndex.js" />
     <Content Include="Areas\LR_CodeDemo\Views\GridDemo\ReportIndex.js" />
+    <Content Include="Areas\LR_CodeDemo\Views\orderUsersDetail\Form.css" />
     <Content Include="Areas\LR_CodeDemo\Views\tempUser\blackCause.js" />
     <Content Include="Areas\LR_CodeDemo\Views\tempUser\WorkSubstituteForm.js" />
     <Content Include="Areas\LR_CodeGeneratorModule\Views\TemplateAPP\Index.css" />
