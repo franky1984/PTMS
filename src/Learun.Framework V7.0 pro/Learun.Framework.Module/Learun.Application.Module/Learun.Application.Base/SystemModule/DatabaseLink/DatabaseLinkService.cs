@@ -308,7 +308,7 @@ namespace Learun.Application.Base.SystemModule
                 DateTime startTime = DateTime.Parse(dt.Rows[0]["F_StartTime"].ToString());
                 DateTime endTime   = DateTime.Parse(dt.Rows[0]["F_EndTime"].ToString());
 
-                for ( DateTime t = startTime; t <= endTime; t.AddDays(1) )
+                for ( DateTime t = startTime; t <= endTime; t = t.AddDays(1) )
                 {
                     // 虚拟参数
                     var dp3 = new DynamicParameters(new
