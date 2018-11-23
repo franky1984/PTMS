@@ -99,11 +99,11 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
         /// <param name="keyValue">主键</param>
         /// <summary>
         /// <returns></returns>
-        public int SaveEntity(string keyValue, LR_Base_TempUserEntity entity, string orderID)
+        public int SaveEntity(ref string keyValue, LR_Base_TempUserEntity entity, string orderID)
         {
             try
             {
-                return orderUsersDetailService.SaveEntity(keyValue, entity, orderID);
+                return orderUsersDetailService.SaveEntity(ref keyValue, entity, orderID);
             }
             catch (Exception ex)
             {

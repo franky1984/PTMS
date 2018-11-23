@@ -137,9 +137,10 @@ namespace Learun.Application.Web.Areas.AppManager.Controllers
 
             //保存健康证明
             string fileHeadImg  = Config.GetValue("fileHealthImg"); //Config.GetValue("fileAppDTImg");
-            string fullFileName = string.Format("{0}/{1}{2}", fileHeadImg, entity.F_Id, FileEextension);
+            //string fullFileName = string.Format("{0}/{1}{2}", fileHeadImg, entity.F_Id, FileEextension);
+            string fullFileName = string.Format("{0}/{1}{2}", fileHeadImg, keyValue, FileEextension);
 
-           
+
 
             //创建文件夹，保存文件
             string path = Path.GetDirectoryName(fullFileName);

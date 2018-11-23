@@ -162,7 +162,7 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
         /// <param name="keyValue">主键</param>
         /// <summary>
         /// <returns></returns>
-        public int SaveEntity(string keyValue, LR_Base_TempUserEntity entity, string orderID)
+        public int SaveEntity(ref string keyValue, LR_Base_TempUserEntity entity, string orderID)
         {
             int checkError = 0;
 
@@ -235,7 +235,8 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
                     {
                         entity.Create();
                         this.BaseRepository().Insert(entity);
-                        userid = entity.F_UserId;
+                        userid   = entity.F_UserId;
+                        keyValue = (string)userid;
                     }
 
                     if( checkError != 2 )

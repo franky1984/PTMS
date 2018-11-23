@@ -175,20 +175,16 @@ namespace Learun.Application.AppMagager
         /// <param name="keyValue">主键</param>
         public void GetImg(string keyValue)
         {
-            DTImgEntity entity = GetEntity(keyValue);
             string img = "";
-            if (entity != null)
+            if (!string.IsNullOrEmpty(keyValue))
             {
-                if (!string.IsNullOrEmpty(entity.F_FileName))
+                string fileHeadImg = Config.GetValue("fileHealthImg"); //Config.GetValue("fileAppDTImg");
+                string fileImg = string.Format("{0}/{1}{2}", fileHeadImg, keyValue, ".jpg");
+                if (DirFileHelper.IsExistFile(fileImg))
                 {
-                    string fileHeadImg = Config.GetValue( "fileHealthImg" ); //Config.GetValue("fileAppDTImg");
-                    string fileImg = string.Format("{0}/{1}{2}", fileHeadImg, entity.F_Id, entity.F_FileName);
-                    if (DirFileHelper.IsExistFile(fileImg))
-                    {
-                        img = fileImg;
-                        FileDownHelper.DownLoadnew(img);
-                        return;
-                    }
+                    img = fileImg;
+                    FileDownHelper.DownLoadnew(img);
+                    return;
                 }
             }
             else

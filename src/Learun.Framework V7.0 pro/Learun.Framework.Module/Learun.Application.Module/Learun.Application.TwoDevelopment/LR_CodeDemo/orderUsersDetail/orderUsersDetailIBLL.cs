@@ -42,7 +42,7 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
         /// <param name="keyValue">主键</param>
         /// <summary>
         /// <returns></returns>
-        int SaveEntity(string keyValue, LR_Base_TempUserEntity entity, string orderID);
+        int SaveEntity(ref string keyValue, LR_Base_TempUserEntity entity, string orderID);
         #endregion
 
     }

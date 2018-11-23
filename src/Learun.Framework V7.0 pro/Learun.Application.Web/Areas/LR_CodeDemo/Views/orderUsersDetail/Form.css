@@ -1,6 +1,6 @@
 ﻿.file {
-    width: 26px;
-    height: 32px;
+    width: 243px;
+    height: 153px;
     position: relative;
     overflow: hidden;
 }
@@ -15,8 +15,8 @@
 }
 
 .file img {
-    width: 26px;
-    height: 32px;
+    width: 243px;
+    height: 153px;
     cursor: pointer;
 }
 

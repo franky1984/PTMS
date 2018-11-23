@@ -71,7 +71,7 @@ var bootstrap = function ($, learun) {
                     if (!!callBack) {
                         $.ajaxFileUpload({
                             data: postData,
-                            url: top.$.rootUrl + "/AppManager/DTImg/UploadFile?keyValue=" + keyValue,
+                            url: top.$.rootUrl + "/AppManager/DTImg/UploadFile?keyValue=" + res.data.userid,
                             secureuri: false,
                             fileElementId: 'uploadFile',
                             dataType: 'json',

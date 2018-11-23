@@ -101,8 +101,13 @@ namespace Learun.Application.Web.Areas.LR_CodeDemo.Controllers
         [AjaxOnly]
         public ActionResult SaveForm(string keyValue, string strEntity, string orderID)
         {
+            if (string.IsNullOrEmpty(keyValue))
+            {
+                keyValue = string.Empty;
+            }
+
             LR_Base_TempUserEntity entity = strEntity.ToObject<LR_Base_TempUserEntity>();
-            int checkError = orderUsersDetailIBLL.SaveEntity(keyValue,entity, orderID);
+            int checkError = orderUsersDetailIBLL.SaveEntity( ref keyValue,entity, orderID);
 
             if( checkError == 2 )
             {
@@ -110,7 +115,7 @@ namespace Learun.Application.Web.Areas.LR_CodeDemo.Controllers
             }
             else
             {
-                return Success( "保存成功！" );
+                return Success( "保存成功！",new{userid=keyValue} );
             }
         }
         #endregion
