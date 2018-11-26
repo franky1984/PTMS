@@ -138,23 +138,34 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
                 //物理删除临时工与订单关联细表
                 this.BaseRepository().ExecuteBySql("DELETE F_Base_TempWorkOrderUserDetail WHERE f_userid=@userid AND F_TempWorkOrderId=@orderid",dp);
 
-                string identity = this.BaseRepository().FindObject("SELECT f_identity FROM LR_Base_TempUser WHERE f_userid='" + keyValue + "'" ).ToString();
+                dp = new DynamicParameters( new { } );
+                dp.Add( "userid", keyValue, DbType.String );
+
+                string identity = this.BaseRepository().FindObject( "SELECT f_identity FROM LR_Base_TempUser WHERE f_userid=@userid", dp ).ToString();
+
+                dp = new DynamicParameters( new { } );
+                dp.Add( "identity", identity, DbType.String );
+                dp.Add( "orderID", orderID, DbType.String );
 
                 //同时删除这个小时工的打卡记录
-                this.BaseRepository().ExecuteBySql("DELETE LR_Base_CardRecord WHERE f_identity='" + identity + "' AND f_orderid='" + orderID + "'", dp);
+                this.BaseRepository().ExecuteBySql( "DELETE LR_Base_CardRecord WHERE f_identity=@identity AND f_orderid=@orderID", dp);
 
-                //                int num = Convert.ToInt32( this.BaseRepository().FindObject( "SELECT COUNT(*) FROM F_Base_TempWorkOrderUserDetail WHERE f_userid=@userid AND F_TempWorkOrderId != @orderid", dp ) );
-                //
-                //                //如果临时工在其它订单里没有出现过，那直接在用户大表中物理删除掉
-                //                if( num <= 0 )
-                //                {
-                //                    var dp2 = new DynamicParameters( new
-                //                    {
-                //                    } );
-                //                    dp2.Add( "userid", keyValue, DbType.String );
-                //
-                //                    this.BaseRepository().ExecuteBySql( "DELETE LR_Base_TempUser WHERE f_userid=@userid",dp2 );
-                //                }
+                dp = new DynamicParameters( new { } );
+                dp.Add( "userid", keyValue, DbType.String );
+                dp.Add( "orderid", orderID, DbType.String );
+
+                int num = Convert.ToInt32( this.BaseRepository().FindObject( "SELECT COUNT(*) FROM F_Base_TempWorkOrderUserDetail WHERE f_userid=@userid AND F_TempWorkOrderId != @orderid", dp ) );
+                
+                //如果临时工在其它订单里没有出现过，那直接在用户大表中物理删除掉
+                if( num <= 0 )
+                {
+                    dp = new DynamicParameters( new
+                    {
+                    } );
+                    dp.Add( "userid", keyValue, DbType.String );
+                
+                    this.BaseRepository().ExecuteBySql( "DELETE LR_Base_TempUser WHERE f_userid=@userid", dp );
+                }
             }
             catch (Exception ex)
             {
@@ -171,8 +182,10 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
 
         /// <summary>
         /// 保存实体数据（新增、修改）
-        /// <param name="keyValue">主键</param>
-        /// <summary>
+        /// </summary>
+        /// <param name="keyValue"></param>
+        /// <param name="entity"></param>
+        /// <param name="orderID"></param>
         /// <returns></returns>
         public int SaveEntity(ref string keyValue, LR_Base_TempUserEntity entity, string orderID)
         {
@@ -192,27 +205,18 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
 
                     //修改该 临时工 在特定订单里的工种类型 
                     this.BaseRepository().ExecuteBySql("UPDATE F_Base_TempWorkOrderUserDetail SET F_CategoryId=@type WHERE F_TempWorkOrderId=@orderid AND f_userid=@userid", dp);
-
-                    dp = new DynamicParameters( new{} );
-                    dp.Add( "userid", keyValue, DbType.String );
-                    dp.Add( "orderid", orderID, DbType.String );
-
                     entity.F_EmployerTypeId = string.Empty;
                     //修改临时工基本信息（大表）
                     this.BaseRepository().Update(entity);
                 }
                 else
                 {
-                    var dp = new DynamicParameters( new
-                    {
-                    } );
+                    var dp = new DynamicParameters( new {} );
                     dp.Add( "identity", entity.F_Identity, DbType.String );
                     //首先从大表获取新将要添加的小时工数据，用于判断该小时工是否以前已经存在
-                    object userid           = this.BaseRepository().FindObject( "SELECT f_userid AS num FROM LR_Base_TempUser WHERE F_Identity=@identity", dp );
+                    object userid = this.BaseRepository().FindObject( "SELECT f_userid AS num FROM LR_Base_TempUser WHERE F_Identity=@identity", dp );
                     
-                    dp = new DynamicParameters( new
-                    {
-                    } );
+                    dp = new DynamicParameters( new {} );
                     dp.Add( "orderID", orderID, DbType.String );
                     //根据订单ID获取劳务公司ID
                     entity.F_EmployerId     = this.BaseRepository().FindObject( "SELECT F_EmployerId FROM F_Base_TempWorkOrder WHERE f_orderid=@orderID", dp ).ToString();
@@ -224,14 +228,12 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
                     {
                         entity.Modify( (string)userid );
                         
-                        var dp2 = new DynamicParameters( new
-                        {
-                        } );
-                        dp2.Add( "userID", (string)userid, DbType.String );
-                        dp2.Add( "orderID", orderID, DbType.String );
+                        dp = new DynamicParameters( new {} );
+                        dp.Add( "userID", (string)userid, DbType.String );
+                        dp.Add( "orderID", orderID, DbType.String );
 
                         //判断该小时工是否已在本次活动中
-                        int num = Convert.ToInt32( this.BaseRepository().FindObject( "SELECT COUNT(*) FROM F_Base_TempWorkOrderUserDetail WHERE f_userid=@userID AND F_TempWorkOrderId=@orderID", dp2 ) );
+                        int num = Convert.ToInt32( this.BaseRepository().FindObject( "SELECT COUNT(*) FROM F_Base_TempWorkOrderUserDetail WHERE f_userid=@userID AND F_TempWorkOrderId=@orderID", dp ) );
 
                         if( num > 0 )
                         {
@@ -268,9 +270,7 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
                         this.BaseRepository().ExecuteBySql( "INSERT F_Base_TempWorkOrderUserDetail(f_id,F_TempWorkOrderId,f_userid,f_employerid,f_categoryid,F_WorkSubstitute,F_CreateUser) VALUES(@f_id,@orderid,@userid,@employerid,@type,0,@createUser)", dp );
 
                         //获取订单的开始时间和结束时间
-                        dp = new DynamicParameters( new
-                        {
-                        } );
+                        dp = new DynamicParameters( new {} );
                         dp.Add( "orderID", orderID, DbType.String );
 
                         DataTable dt       = this.BaseRepository().FindTable( "SELECT * FROM F_Base_TempWorkOrder WHERE f_orderid=@orderID", dp );
@@ -280,10 +280,7 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
                         for ( DateTime t = startTime; t <= endTime; t=t.AddDays(1) )
                         {
                             // 虚拟参数
-                            var dp2 = new DynamicParameters(new
-                            {
-                            });
-
+                            var dp2 = new DynamicParameters(new {});
                             dp2.Add("F_RecordId", Guid.NewGuid().ToString(), DbType.String);
                             dp2.Add("F_Identity", entity.F_Identity, DbType.String);
                             dp2.Add("F_CreateTime", t, DbType.String);
@@ -293,7 +290,7 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
                             dp2.Add("F_RecordDate", t.ToString("yyyy-MM-dd"), DbType.String);
 
                             //自动给临时工往打卡记录里初始化打卡记录
-                            this.BaseRepository().ExecuteBySql("INSERT LR_Base_CardRecord(F_RecordId,F_Identity,F_CreateTime,F_RealName,F_Gender,F_OrderId,F_RecordDate) VALUES(@F_RecordId,@F_Identity,@F_CreateTime,@F_RealName,@F_Gender,@F_OrderId,@F_RecordDate)", dp2 );
+                            this.BaseRepository().ExecuteBySql("INSERT LR_Base_CardRecord(F_RecordId,F_Identity,F_CreateTime,F_RealName,F_Gender,F_OrderId,F_RecordDate) VALUES (@F_RecordId,@F_Identity,@F_CreateTime,@F_RealName,@F_Gender,@F_OrderId,@F_RecordDate)", dp2 );
                         }
                     }
                 }

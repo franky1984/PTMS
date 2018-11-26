@@ -106,7 +106,7 @@ var bootstrap = function ($, learun) {
             $('#lr_delete').on('click', function () {
                 var keyValue = $('#gridtable').jfGridValue('F_UserId');
                 if (learun.checkrow(keyValue)) {
-                    learun.layerConfirm('是否确认删除该项！', function (res) {
+                    learun.layerConfirm('是否确认删除这个小时工？', function (res) {
                         if (res) {
                             learun.deleteForm(top.$.rootUrl + '/LR_CodeDemo/orderUsersDetail/DeleteForm', { keyValue: keyValue, orderID: orderID }, function () {
                                 refreshGirdData();
