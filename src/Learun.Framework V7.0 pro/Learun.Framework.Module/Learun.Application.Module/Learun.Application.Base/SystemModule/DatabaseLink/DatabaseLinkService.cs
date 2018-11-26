@@ -275,25 +275,22 @@ namespace Learun.Application.Base.SystemModule
         /// <param name="mobile"></param>
         public void InsertOrderDetail(string identity, string orderID, string realName, string categoryID, string gender, string employerID, string mobile )
         {
+            var dp = new DynamicParameters( new {} );
+            dp.Add( "identity", identity, DbType.String );
+
             //通过身份证号获取人员ID和所属用户单位ID
-            DataTable dt = this.BaseRepository().FindTable("SELECT F_UserId,F_EmployerId FROM LR_Base_TempUser WHERE F_Identity='" + identity.Trim() + "'");
+            DataTable dt = this.BaseRepository().FindTable( "SELECT F_UserId,F_EmployerId FROM LR_Base_TempUser WHERE F_Identity=@identity", dp );
 
-            var dp = new DynamicParameters(new
-            {
-            });
-
+            dp = new DynamicParameters(new {});
             dp.Add("orderID", orderID, DbType.String);
-            dp.Add("f_userid", dt.Rows[0]["F_UserId"].ToString(), DbType.String);
+            dp.Add("userid", dt.Rows[0]["F_UserId"].ToString(), DbType.String);
 
-            int num = Convert.ToInt32(this.BaseRepository().FindObject("SELECT COUNT(*) num FROM F_Base_TempWorkOrderUserDetail WHERE F_TempWorkOrderId=@orderID AND f_userid=@f_userid", dp));
+            int num = Convert.ToInt32(this.BaseRepository().FindObject("SELECT COUNT(*) num FROM F_Base_TempWorkOrderUserDetail WHERE F_TempWorkOrderId=@orderID AND f_userid=@userid", dp));
 
             //判断该人员是否已和订单关联
             if ( num <= 0 )
             {
-                dp = new DynamicParameters(new
-                {
-                });
-
+                dp = new DynamicParameters(new {});
                 dp.Add("f_id", Guid.NewGuid().ToString(), DbType.String);
                 dp.Add("F_TempWorkOrderId", orderID, DbType.String);
                 dp.Add("f_userid", dt.Rows[0]["F_UserId"].ToString(), DbType.String);
@@ -328,17 +325,14 @@ namespace Learun.Application.Base.SystemModule
                 }
             }
 
-            var dp2 = new DynamicParameters(new
-            {
-            });
-
-            dp2.Add("realName", realName, DbType.String);
-            dp2.Add("employerID", employerID, DbType.String);
-            dp2.Add("gender", gender, DbType.String);
-            dp2.Add("mobile", mobile, DbType.String);
-            dp2.Add("userid", dt.Rows[0]["F_UserId"].ToString(), DbType.String);
+            dp = new DynamicParameters(new {});
+            dp.Add("realName", realName, DbType.String);
+            dp.Add("employerID", employerID, DbType.String);
+            dp.Add("gender", gender, DbType.String);
+            dp.Add("mobile", mobile, DbType.String);
+            dp.Add("userid", dt.Rows[0]["F_UserId"].ToString(), DbType.String);
             //修改临时工大表
-            this.BaseRepository().ExecuteBySql( "UPDATE LR_Base_TempUser SET F_RealName=@realName,F_EmployerId=@employerID,F_Gender=@gender,F_Mobile=@mobile WHERE f_userid=@userid", dp2 );
+            this.BaseRepository().ExecuteBySql( "UPDATE LR_Base_TempUser SET F_RealName=@realName,F_EmployerId=@employerID,F_Gender=@gender,F_Mobile=@mobile WHERE f_userid=@userid", dp );
         }
 
         /// <summary>
