@@ -202,9 +202,10 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
                     dp.Add("userid", keyValue, DbType.String);
                     dp.Add("orderid", orderID, DbType.String);
                     dp.Add("type", entity.F_EmployerTypeId, DbType.String);
+                    dp.Add( "employerid", entity.F_EmployerId, DbType.String );
 
                     //修改该 临时工 在特定订单里的工种类型 
-                    this.BaseRepository().ExecuteBySql("UPDATE F_Base_TempWorkOrderUserDetail SET F_CategoryId=@type WHERE F_TempWorkOrderId=@orderid AND f_userid=@userid", dp);
+                    this.BaseRepository().ExecuteBySql( "UPDATE F_Base_TempWorkOrderUserDetail SET f_employerid=@employerid,F_CategoryId=@type WHERE F_TempWorkOrderId=@orderid AND f_userid=@userid", dp);
                     entity.F_EmployerTypeId = string.Empty;
                     //修改临时工基本信息（大表）
                     this.BaseRepository().Update(entity);
@@ -275,9 +276,9 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
                         } );
                         dp.Add( "orderID", orderID, DbType.String );
 
-                        DataTable dt = this.BaseRepository().FindTable( "SELECT * FROM F_Base_TempWorkOrder WHERE f_orderid=@orderID", dp );
+                        DataTable dt       = this.BaseRepository().FindTable( "SELECT * FROM F_Base_TempWorkOrder WHERE f_orderid=@orderID", dp );
                         DateTime startTime = DateTime.Parse( dt.Rows[ 0 ][ "F_StartTime" ].ToString() );
-                        DateTime endTime = DateTime.Parse( dt.Rows[ 0 ][ "F_EndTime" ].ToString() );
+                        DateTime endTime   = DateTime.Parse( dt.Rows[ 0 ][ "F_EndTime" ].ToString() );
 
                         for( DateTime t = startTime ; t <= endTime ; t = t.AddDays( 1 ) )
                         {
@@ -296,18 +297,6 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
                             //自动给临时工往打卡记录里初始化打卡记录
                             this.BaseRepository().ExecuteBySql( "INSERT LR_Base_CardRecord(F_RecordId,F_Identity,F_CreateTime,F_RealName,F_Gender,F_OrderId,F_RecordDate) VALUES (@F_RecordId,@F_Identity,@F_CreateTime,@F_RealName,@F_Gender,@F_OrderId,@F_RecordDate)", dp2 );
                         }
-                    }
-                    else
-                    {
-                        // 虚拟参数
-                        dp = new DynamicParameters( new {} );
-                        dp.Add( "id", f_id, DbType.String );
-                        dp.Add( "orderid", orderID, DbType.String );
-                        dp.Add( "type", type, DbType.String );
-                        dp.Add( "employerid", entity.F_EmployerId, DbType.String );
-
-                        //修改小时工在细表中数据
-                        this.BaseRepository().ExecuteBySql( "UPDATE F_Base_TempWorkOrderUserDetail SET f_employerid=@employerid,f_categoryid=@type WHERE f_id=@id AND F_TempWorkOrderId=@orderid", dp );
                     }
                 }
             }
