@@ -41,8 +41,18 @@ var bootstrap = function ($, learun) {
             $('#gridtable').lrAuthorizeJfGrid({
                 url: top.$.rootUrl + '/LR_CodeDemo/cardTJ/GetPageList',
                 headData: [
-                    { label: "活动名称", name: "F_MeetingName", width: 100, align: "left" },
                     { label: "单位名称", name: "f_employername", width: 100, align: "left" },
+                    { label: "活动名称", name: "F_MeetingName", width: 100, align: "left" },
+                    {
+                        label: "开始时间", name: "F_StartTime", width: 100, align: "left", formatter: function (cellvalue) {
+                            return learun.formatDate(cellvalue, 'yyyy-MM-dd hh:mm');
+                        }
+                    },
+                    {
+                        label: "结束时间", name: "F_EndTime", width: 100, align: "left", formatter: function (cellvalue) {
+                            return learun.formatDate(cellvalue, 'yyyy-MM-dd hh:mm');
+                        }
+                    },
                     { label: "姓名", name: "f_realname", width: 100, align: "left" },
                     { label: "身份证号", name: "f_identity", width: 100, align: "left" },
                     { label: "工种", name: "F_CategoryName", width: 100, align: "left" },

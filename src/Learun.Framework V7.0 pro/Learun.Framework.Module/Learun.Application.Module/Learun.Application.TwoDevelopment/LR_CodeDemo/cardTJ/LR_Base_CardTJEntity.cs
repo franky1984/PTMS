@@ -87,8 +87,25 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
         /// <summary>
         /// f_createtime
         /// </summary>
-        [Column("F_CREATETIME")]
-        public DateTime? f_createtime { get; set; }
+        [Column( "F_CREATETIME" )]
+        public DateTime? f_createtime
+        {
+            get; set;
+        }
+
+        [Column( "F_StartTime" )]
+        public DateTime? F_StartTime
+        {
+            get;
+            set;
+        }
+
+        [Column( "F_EndTime" )]
+        public DateTime? F_EndTime
+        {
+            get;
+            set;
+        }
         #endregion
 
         #region 扩展操作

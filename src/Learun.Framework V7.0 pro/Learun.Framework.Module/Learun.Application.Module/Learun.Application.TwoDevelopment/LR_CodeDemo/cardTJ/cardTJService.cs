@@ -30,14 +30,13 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
             {
                 var strSql = new StringBuilder();
                 strSql.Append( @"
-                SELECT t.F_MeetingName,e.F_EmployerName,u.F_RealName,u.F_Identity,type.F_CategoryName,
+                SELECT t.F_MeetingName,e.F_EmployerName,u.F_RealName,u.F_Identity,type.F_CategoryName,t.F_StartTime,t.F_EndTime,
  (SELECT COUNT(*) AS num FROM LR_Base_CardRecord WHERE F_OrderId=t.F_OrderId AND F_RealName=o.f_userid AND f_lateState=0 AND f_LeaveEarly=0) as f_normal,
  (SELECT COUNT(*) AS num FROM LR_Base_CardRecord WHERE F_OrderId=t.F_OrderId AND F_RealName=o.f_userid AND f_lateState=1) as f_late,
 (SELECT COUNT(*) AS num FROM LR_Base_CardRecord WHERE F_OrderId=t.F_OrderId AND F_RealName=o.f_userid AND f_LeaveEarly=1) as f_leave,
- (SELECT COUNT(*) AS num FROM LR_Base_CardRecord WHERE F_OrderId=t.F_OrderId AND F_RealName=o.f_userid AND f_first IS NULL) as f_absenteeism,
+ (SELECT COUNT(*) AS num FROM LR_Base_CardRecord WHERE F_OrderId=t.F_OrderId AND F_RealName=o.f_userid AND f_first IS NULL) as f_absenteeism 
 FROM F_Base_TempWorkOrder t LEFT JOIN F_Base_TempWorkOrderUserDetail o ON t.f_orderid=o.F_TempWorkOrderId 
-LEFT JOIN F_Base_Employer e ON o.F_EmployerId=e.F_EmployerId LEFT JOIN LR_Base_TempUser u ON o.f_userid=u.f_userid LEFT JOIN F_Base_TempWorkOrderCategoryDetail c ON 
-o.F_CategoryId=c.F_CategoryName AND t.F_OrderId=c.F_TempWorkOrderId LEFT JOIN F_Base_EmployerType type ON o.f_categoryId=type.f_Id" );
+LEFT JOIN F_Base_Employer e ON o.F_EmployerId=e.F_EmployerId LEFT JOIN LR_Base_TempUser u ON o.f_userid=u.f_userid LEFT JOIN F_Base_EmployerType type ON o.f_categoryId=type.f_Id" );
                 strSql.Append( "  WHERE GETDATE() >= dateadd(day,1,t.F_EndTime) AND 1=1 " );
 
                 var queryParam = queryJson.ToJObject();
