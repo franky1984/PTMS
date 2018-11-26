@@ -278,7 +278,7 @@ namespace Learun.Application.Base.SystemModule
             var dp = new DynamicParameters( new {} );
             dp.Add( "identity", identity, DbType.String );
 
-            //通过身份证号获取人员ID
+            //通过身份证号获取人员ID 
             string userID = this.BaseRepository().FindObject( "SELECT F_UserId FROM LR_Base_TempUser WHERE F_Identity=@identity", dp ).ToString();
 
             dp = new DynamicParameters(new {});
