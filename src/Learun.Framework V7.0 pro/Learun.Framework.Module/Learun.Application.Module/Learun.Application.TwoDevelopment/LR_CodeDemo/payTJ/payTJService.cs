@@ -31,10 +31,7 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
                 //只统计订单结束的
                 var strSql = new StringBuilder();
                 strSql.Append( @"
-               SELECT t.F_MeetingName,e.F_EmployerName,(SELECT COUNT(*) FROM F_Base_TempWorkOrderUserDetail WHERE F_TempWorkOrderId=t.f_orderid) as sumPeople,
-t.F_StartTime,t.F_EndTime,(SELECT COUNT(*) AS num FROM LR_Base_CardRecord WHERE F_OrderId=t.f_orderid GROUP BY CONVERT(varchar(10), F_CreateTime, 23)) as sumWorkday,
- (SELECT ISNULL(SUM(f_realDaySalary),0) FROM LR_Base_CardRecord WHERE f_orderid=t.F_OrderId) as f_realDaySalary,
-  (SELECT ISNULL(SUM(f_shouldDaysalary),0) FROM LR_Base_CardRecord WHERE f_orderid=t.F_OrderId) as f_shouldDaysalary FROM F_Base_TempWorkOrder t INNER JOIN LR_Base_User u ON t.F_CreateUser=u.f_userID LEFT JOIN F_Base_Employer e ON t.F_EmployerId=e.F_EmployerId WHERE u.F_CompanyId=@companyID ANDGETDATE() >= dateadd(day,1,t.F_EndTime) AND 1=1 " );
+               SELECT t.F_MeetingName,e.F_EmployerName,(SELECT COUNT(*) FROM F_Base_TempWorkOrderUserDetail WHERE F_TempWorkOrderId=t.f_orderid) as sumPeople,MAX(t.F_StartTime) AS F_StartTime,MAX(t.F_EndTime) AS F_EndTime,(SELECT COUNT(*) AS num FROM LR_Base_CardRecord WHERE F_OrderId=t.f_orderid GROUP BY CONVERT(varchar(10), F_CreateTime, 23)) as sumWorkday,(SELECT ISNULL(SUM(f_realDaySalary),0) FROM LR_Base_CardRecord WHERE f_orderid=t.F_OrderId) as f_realDaySalary,(SELECT ISNULL(SUM(f_shouldDaysalary),0) FROM LR_Base_CardRecord WHERE f_orderid=t.F_OrderId) as f_shouldDaysalary FROM F_Base_TempWorkOrder t INNER JOIN LR_Base_User u ON t.F_CreateUser=u.f_userID LEFT JOIN F_Base_TempWorkOrderUserDetail o ON t.f_orderid=o.F_TempWorkOrderId LEFT JOIN F_Base_Employer e ON o.F_EmployerId=e.F_EmployerId WHERE u.F_CompanyId=@companyID AND GETDATE() >= dateadd(day,1,t.F_EndTime) GROUP BY  t.f_orderid,t.F_MeetingName,e.F_EmployerName" );
 
                 var queryParam = queryJson.ToJObject();
                 // 虚拟参数
