@@ -222,6 +222,7 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
                     entity.F_EmployerId     = this.BaseRepository().FindObject( "SELECT F_EmployerId FROM F_Base_TempWorkOrder WHERE f_orderid=@orderID", dp ).ToString();
                     string type             = entity.F_EmployerTypeId;
                     entity.F_EmployerTypeId = string.Empty;
+                    object f_id             = null;
 
                     //用身份证判断用户是否存在大表中，如果存在直接修改临时工表数据(因为用户基本信息是通用一样的，只有工种是挂在每个订单下)。
                     if (userid != null && (string)userid != string.Empty )
@@ -233,9 +234,9 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
                         dp.Add( "orderID", orderID, DbType.String );
 
                         //判断该小时工是否已在本次活动中
-                        int num = Convert.ToInt32( this.BaseRepository().FindObject( "SELECT COUNT(*) FROM F_Base_TempWorkOrderUserDetail WHERE f_userid=@userID AND F_TempWorkOrderId=@orderID", dp ) );
+                        f_id = this.BaseRepository().FindObject( "SELECT f_id FROM F_Base_TempWorkOrderUserDetail WHERE f_userid=@userID AND F_TempWorkOrderId=@orderID", dp );
 
-                        if( num > 0 )
+                        if( f_id != null && !string.IsNullOrEmpty( f_id.ToString() ) )
                         {
                             checkError = 2;  //代表该订单已经包含该临时工
                         }
@@ -259,7 +260,6 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
                         dp = new DynamicParameters( new
                         {
                         } );
-
                         dp.Add( "f_id", Guid.NewGuid().ToString(), DbType.String );
                         dp.Add( "userid", (string)userid, DbType.String );
                         dp.Add( "orderid", orderID, DbType.String );
@@ -270,28 +270,44 @@ namespace Learun.Application.TwoDevelopment.LR_CodeDemo
                         this.BaseRepository().ExecuteBySql( "INSERT F_Base_TempWorkOrderUserDetail(f_id,F_TempWorkOrderId,f_userid,f_employerid,f_categoryid,F_WorkSubstitute,F_CreateUser) VALUES(@f_id,@orderid,@userid,@employerid,@type,0,@createUser)", dp );
 
                         //获取订单的开始时间和结束时间
-                        dp = new DynamicParameters( new {} );
+                        dp = new DynamicParameters( new
+                        {
+                        } );
                         dp.Add( "orderID", orderID, DbType.String );
 
-                        DataTable dt       = this.BaseRepository().FindTable( "SELECT * FROM F_Base_TempWorkOrder WHERE f_orderid=@orderID", dp );
-                        DateTime startTime = DateTime.Parse(dt.Rows[0]["F_StartTime"].ToString());
-                        DateTime endTime   = DateTime.Parse(dt.Rows[0]["F_EndTime"].ToString());
+                        DataTable dt = this.BaseRepository().FindTable( "SELECT * FROM F_Base_TempWorkOrder WHERE f_orderid=@orderID", dp );
+                        DateTime startTime = DateTime.Parse( dt.Rows[ 0 ][ "F_StartTime" ].ToString() );
+                        DateTime endTime = DateTime.Parse( dt.Rows[ 0 ][ "F_EndTime" ].ToString() );
 
-                        for ( DateTime t = startTime; t <= endTime; t=t.AddDays(1) )
+                        for( DateTime t = startTime ; t <= endTime ; t = t.AddDays( 1 ) )
                         {
                             // 虚拟参数
-                            var dp2 = new DynamicParameters(new {});
-                            dp2.Add("F_RecordId", Guid.NewGuid().ToString(), DbType.String);
-                            dp2.Add("F_Identity", entity.F_Identity, DbType.String);
-                            dp2.Add("F_CreateTime", t, DbType.String);
-                            dp2.Add("F_RealName", entity.F_RealName, DbType.String);
-                            dp2.Add("F_Gender", entity.F_Gender, DbType.Int32);
-                            dp2.Add("F_OrderId", orderID, DbType.String);
-                            dp2.Add("F_RecordDate", t.ToString("yyyy-MM-dd"), DbType.String);
+                            var dp2 = new DynamicParameters( new
+                            {
+                            } );
+                            dp2.Add( "F_RecordId", Guid.NewGuid().ToString(), DbType.String );
+                            dp2.Add( "F_Identity", entity.F_Identity, DbType.String );
+                            dp2.Add( "F_CreateTime", t, DbType.String );
+                            dp2.Add( "F_RealName", entity.F_RealName, DbType.String );
+                            dp2.Add( "F_Gender", entity.F_Gender, DbType.Int32 );
+                            dp2.Add( "F_OrderId", orderID, DbType.String );
+                            dp2.Add( "F_RecordDate", t.ToString( "yyyy-MM-dd" ), DbType.String );
 
                             //自动给临时工往打卡记录里初始化打卡记录
-                            this.BaseRepository().ExecuteBySql("INSERT LR_Base_CardRecord(F_RecordId,F_Identity,F_CreateTime,F_RealName,F_Gender,F_OrderId,F_RecordDate) VALUES (@F_RecordId,@F_Identity,@F_CreateTime,@F_RealName,@F_Gender,@F_OrderId,@F_RecordDate)", dp2 );
+                            this.BaseRepository().ExecuteBySql( "INSERT LR_Base_CardRecord(F_RecordId,F_Identity,F_CreateTime,F_RealName,F_Gender,F_OrderId,F_RecordDate) VALUES (@F_RecordId,@F_Identity,@F_CreateTime,@F_RealName,@F_Gender,@F_OrderId,@F_RecordDate)", dp2 );
                         }
+                    }
+                    else
+                    {
+                        // 虚拟参数
+                        dp = new DynamicParameters( new {} );
+                        dp.Add( "id", f_id, DbType.String );
+                        dp.Add( "orderid", orderID, DbType.String );
+                        dp.Add( "type", type, DbType.String );
+                        dp.Add( "employerid", entity.F_EmployerId, DbType.String );
+
+                        //修改小时工在细表中数据
+                        this.BaseRepository().ExecuteBySql( "UPDATE F_Base_TempWorkOrderUserDetail SET f_employerid=@employerid,f_categoryid=@type WHERE f_id=@id AND F_TempWorkOrderId=@orderid", dp );
                     }
                 }
             }
