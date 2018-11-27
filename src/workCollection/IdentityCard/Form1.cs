@@ -17,8 +17,12 @@ using System.Data.SqlClient;
 
 namespace IdentityCard
 {
-    public partial class Form1 : Form 
+    public partial class Form1 : Form
     {
+        /// <summary>
+        /// 身份证号
+        /// </summary>
+        private string identity;
         [DllImport("DLL_File.dll", CallingConvention = CallingConvention.Cdecl)]//注意这里的调用方式为Cdecl
         static extern int unpack(byte[] szSrcWltData, byte[] szDstPicData, int iIsSaveToBmp);
 
@@ -32,6 +36,7 @@ namespace IdentityCard
             InitializeComponent();
             Control.CheckForIllegalCrossThreadCalls = false;
             ReadNewModel();
+            init();
         }
 
         /// <summary>
@@ -39,13 +44,23 @@ namespace IdentityCard
         /// </summary>
         void init()
         {
-            DataTable company        = SqlDbHelper.ExecuteDataTable("SELECT * FROM F_Base_Employer");
+            DataTable activity   = SqlDbHelper.ExecuteDataTable("SELECT F_OrderId,F_MeetingName FROM F_Base_TempWorkOrder");
+            DataRow dr           = activity.NewRow();
+            dr["F_OrderId"]      = "0";
+            dr["F_MeetingName"]  = "——请选择——";
+            activity.Rows.InsertAt(dr, 0);
+            ddlActivity.DataSource    = activity;
+            ddlActivity.DisplayMember = "F_MeetingName";
+            ddlActivity.ValueMember   = "F_OrderId";
+
+            DataTable company        = SqlDbHelper.ExecuteDataTable("SELECT F_EmployerId,F_EmployerName FROM F_Base_Employer");
+            dr                       = company.NewRow();
+            dr["F_EmployerId"]       = "0";
+            dr["F_EmployerName"]     = "——请选择——";
+            company.Rows.InsertAt(dr, 0);
             ddlCompany.DataSource    = company;
             ddlCompany.DisplayMember = "F_EmployerName";
             ddlCompany.ValueMember   = "F_EmployerId";
-            ddlCompany.Items.Insert(0, "请选择");
-
-            DataTable type           = SqlDbHelper.ExecuteDataTable("SELECT * FROM ");
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -62,7 +77,6 @@ namespace IdentityCard
 
             btnStart.Enabled = false;
             btnStart.Text    = "已启动";
-            buttonX3.Enabled = true; //启动采集
         }
 
         public void GetData()
@@ -384,7 +398,7 @@ namespace IdentityCard
         }
 
         /// <summary>
-        /// 更新临时工上、下班打卡时间
+        /// 
         /// </summary>
         /// <param name="identity">身份证号</param>
         public void Insert( string identity )
@@ -393,14 +407,12 @@ namespace IdentityCard
             list.Add(new SqlParameter("@identity", identity ) );
 
             int checkBlack   = SqlDbHelper.ExecuteScalar( "SELECT COUNT(*) AS num FROM LR_Base_TempUser WHERE F_Identity=@identity AND F_EnabledMark=0", list.ToArray() );
-            buttonX3.Enabled = true; //启动采集
 
             //判断是否是黑名单用户
             if ( checkBlack > 0 )
             {
                 label13.ForeColor = Color.Red;
                 label13.Text      = "无效用户！";
-                buttonX3.Enabled  = false; //启动采集
             }
             else
             {
@@ -421,6 +433,122 @@ namespace IdentityCard
         private void panelEx1_Click( object sender, EventArgs e )
         {
 
+        }
+
+        /// <summary>
+        /// 人员采集
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonX3_Click_1(object sender, EventArgs e)
+        {
+            string company  = ddlCompany.SelectedValue.ToString();
+            string activity = ddlActivity.SelectedValue.ToString();
+            string type     = string.Empty;
+
+            try
+            {
+                type = ddlType.SelectedValue.ToString();
+            }
+            catch
+            {
+                type = "0";
+            }
+
+            if (activity == "0")
+            {
+                MessageBox.Show("请选择一个活动！");
+            }
+            else if ( company == "0" )
+            {
+                MessageBox.Show("请选择一个劳务公司！");
+            }
+            else if (type == "0")
+            {
+                MessageBox.Show("请选择一个工种！");
+            }
+            else if (string.IsNullOrEmpty(identity))
+            {
+                MessageBox.Show("没有检测到打卡人！");
+            }
+            else
+            {
+                List<SqlParameter> list = new List<SqlParameter>();
+                list.Add(new SqlParameter("@identity", identity));
+
+                //获取小时工信息
+                DataTable userInfo = SqlDbHelper.ExecuteDataTable("SELECT f_userid,F_RealName,F_Gender FROM MLR_Base_TempUser WHERE F_Identity=@identity", list.ToArray() );
+
+                list = new List<SqlParameter>();
+                list.Add(new SqlParameter("@orderID", ddlActivity));
+                list.Add(new SqlParameter("@userID", userInfo.Rows[ 0 ]["f_userid"].ToString() ));
+
+                int num = Convert.ToInt32( SqlDbHelper
+                    .ExecuteScalar(
+                        "SELECT COUNT(*) AS num FROM F_Base_TempWorkOrderUserDetail WHERE F_TempWorkOrderId=@orderID AND f_userID=@userID", list.ToArray() )
+                    .ToString() );
+
+                if ( num > 0 )
+                {
+                    MessageBox.Show("活动里已存在该临时工！");
+                }
+                else
+                {
+                    list.Add(new SqlParameter("@f_id", Guid.NewGuid().ToString()));
+                    list.Add(new SqlParameter("@f_employerid", company));
+                    list.Add(new SqlParameter("@f_categoryid", type));
+
+                    //添加小时工与活动对应关系
+                    SqlDbHelper.ExecuteNonQuery("INSERT F_Base_TempWorkOrderUserDetail(f_id,F_TempWorkOrderId,f_userid,f_employerid,f_categoryid,F_WorkSubstitute) VALUES(@f_id,@orderID,@userID,@f_employerid,@f_categoryid,0)", list.ToArray());
+
+                    //--------------------------往打卡记录表中初始经小时工打卡记录------------------------------
+                    list = new List<SqlParameter>();
+                    list.Add(new SqlParameter("@orderID", ddlActivity));
+
+                    DataTable dt       = SqlDbHelper.ExecuteDataTable( "SELECT * FROM F_Base_TempWorkOrder WHERE f_orderid=@orderID", list.ToArray() );
+                    DateTime startTime = DateTime.Parse(dt.Rows[0]["F_StartTime"].ToString());
+                    DateTime endTime   = DateTime.Parse(dt.Rows[0]["F_EndTime"].ToString());
+
+                    for (DateTime t = startTime; t <= endTime; t = t.AddDays(1))
+                    {
+                        list.Add(new SqlParameter("@F_RecordId", Guid.NewGuid().ToString()));
+                        list.Add(new SqlParameter("@F_Identity", identity));
+                        list.Add(new SqlParameter("@F_CreateTime", t));
+                        list.Add(new SqlParameter("@F_RealName", userInfo.Rows[0]["F_RealName"].ToString() ));
+                        list.Add(new SqlParameter("@F_Gender", userInfo.Rows[0]["F_Gender"].ToString() ));
+                        list.Add(new SqlParameter("@F_RecordDate", t.ToString("yyyy-MM-dd")));
+
+                        //自动给临时工往打卡记录里初始化打卡记录
+                        SqlDbHelper.ExecuteNonQuery("INSERT LR_Base_CardRecord(F_RecordId,F_Identity,F_CreateTime,F_RealName,F_Gender,F_OrderId,F_RecordDate) VALUES (@F_RecordId,@F_Identity,@F_CreateTime,@F_RealName,@F_Gender,@orderID,@F_RecordDate)", list.ToArray() );
+                    }
+                }
+
+                identity = string.Empty;
+            }
+        }
+
+        private void ddlActivity_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ddlActivity_SelectedValueChanged(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void ddlActivity_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            //根据选择的活动只获取这个活动下的工种
+            DataTable type = SqlDbHelper.ExecuteDataTable("SELECT DISTINCT t.F_CategoryId,t.F_CategoryName FROM LR_Base_Category t INNER JOIN F_Base_TempWorkOrderCategoryDetail c ON t.F_CategoryId=c.F_CategoryName WHERE c.F_TempWorkOrderId='" + ddlActivity.SelectedValue.ToString() + "'");
+
+            DataRow dr = type.NewRow();
+            dr["F_CategoryId"] = "0";
+            dr["F_CategoryName"] = "——请选择——";
+            type.Rows.InsertAt(dr, 0);
+            ddlType.DataSource = type;
+            ddlType.DisplayMember = "F_CategoryName";
+            ddlType.ValueMember = "F_CategoryId";
         }
     }
 }
