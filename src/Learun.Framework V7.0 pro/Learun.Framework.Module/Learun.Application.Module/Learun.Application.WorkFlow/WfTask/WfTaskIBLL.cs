@@ -22,7 +22,7 @@ namespace Learun.Application.WorkFlow
         /// <param name="keyValue">主键</param>
         /// <returns></returns>
 
-        EmailConfigEntity GetCurrentConfig();
+        DataTable GetCurrentConfig();
         /// <summary>
         /// 获取未完成的流程实例任务列表
         /// </summary>

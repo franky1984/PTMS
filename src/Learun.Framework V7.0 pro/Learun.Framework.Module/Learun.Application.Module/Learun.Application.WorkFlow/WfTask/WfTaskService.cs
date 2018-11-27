@@ -24,11 +24,11 @@ namespace Learun.Application.WorkFlow
         /// <param name="keyValue">主键</param>
         /// <returns></returns>
 
-        public EmailConfigEntity GetCurrentConfig()
+        public DataTable GetCurrentConfig()
         {
             try
             {
-                return this.BaseRepository().FindEntity<EmailConfigEntity>(t => t.F_EnabledMark == 1);
+                return this.BaseRepository().FindTable("SELECT * FROM LR_EmailConfig");
             }
             catch (Exception ex)
             {

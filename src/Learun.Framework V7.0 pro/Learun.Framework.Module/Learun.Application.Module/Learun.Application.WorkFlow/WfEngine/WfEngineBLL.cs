@@ -1138,16 +1138,16 @@ namespace Learun.Application.WorkFlow
 
         private void SendMail( string auditorId, string processID )
         {
-            EmailConfigEntity configEntity = wfTaskIBLL.GetCurrentConfig();
+            DataTable configEntity = wfTaskIBLL.GetCurrentConfig();
             MailAccount account            = new MailAccount();
-            account.POP3Host               = configEntity.F_POP3Host;
-            account.POP3Port               = configEntity.F_POP3Port.ToInt();
-            account.SMTPHost               = configEntity.F_SMTPHost;
-            account.SMTPPort               = configEntity.F_SMTPPort.ToInt();
-            account.Account                = configEntity.F_Account;
-            account.AccountName            = configEntity.F_SenderName;
-            account.Password               = configEntity.F_Password;
-            account.Ssl                    = configEntity.F_Ssl == 1 ? true : false;
+            account.POP3Host               = configEntity.Rows[0]["F_POP3Host"].ToString();
+            account.POP3Port               = Convert.ToInt32( configEntity.Rows[0]["F_POP3Port"].ToString() );
+            account.SMTPHost               = configEntity.Rows[0]["F_SMTPHost"].ToString();
+            account.SMTPPort               = Convert.ToInt32( configEntity.Rows[0]["F_SMTPPort"].ToString() );
+            account.Account                = configEntity.Rows[0]["F_Account"].ToString();
+            account.AccountName            = configEntity.Rows[0]["F_SenderName"].ToString();
+            account.Password               = configEntity.Rows[0]["F_Password"].ToString();
+            account.Ssl                    = Convert.ToInt32( configEntity.Rows[0]["F_Ssl"].ToString() ) == 1 ? true : false;
 
             DataTable emailDT  = wfTaskIBLL.GetUsersEmail(auditorId);
             //获取活动标题

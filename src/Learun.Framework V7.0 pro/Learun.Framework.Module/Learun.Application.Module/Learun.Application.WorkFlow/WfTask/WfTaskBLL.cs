@@ -30,7 +30,7 @@ namespace Learun.Application.WorkFlow
         /// <param name="keyValue">主键</param>
         /// <returns></returns>
 
-        public EmailConfigEntity GetCurrentConfig()
+        public DataTable GetCurrentConfig()
         {
             try
             {
