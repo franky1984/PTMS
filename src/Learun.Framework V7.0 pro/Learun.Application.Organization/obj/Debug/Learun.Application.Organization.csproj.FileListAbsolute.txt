@@ -348,6 +348,12 @@ E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Application.Organization\bin\Debug\Microsoft.Practices.Unity.Configuration.xml
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Application.Organization\bin\Debug\Microsoft.Practices.ServiceLocation.pdb
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Application.Organization\bin\Debug\Microsoft.Practices.ServiceLocation.xml
-E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Application.Organization\obj\Debug\Learun.Application.Organization.csprojResolveAssemblyReference.cache
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Application.Organization\obj\Debug\Learun.Application.Organization.dll
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Application.Organization\obj\Debug\Learun.Application.Organization.pdb
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Application.Organization\bin\Debug\Learun.Application.WeChat.dll.config
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Application.Organization\bin\Debug\Learun.DataBase.Repository.dll.config
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Application.Organization\bin\Debug\Learun.Util.dll.config
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Application.Organization\bin\Debug\Learun.DataBase.dll.config
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Application.Organization\obj\Debug\Learun.Application.Organization.csprojAssemblyReference.cache
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Application.Organization\obj\Debug\Learun.Application.Organization.csproj.CoreCompileInputs.cache
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Application.Organization\obj\Debug\Learun.Application.Organization.csproj.CopyComplete

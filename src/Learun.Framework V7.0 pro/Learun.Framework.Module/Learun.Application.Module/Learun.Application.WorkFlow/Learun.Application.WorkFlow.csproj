@@ -96,6 +96,7 @@
     <Compile Include="WfTaskHistory\WfTaskHistoryEntity.cs" />
     <Compile Include="WfTaskHistory\WfTaskHistoryIBLL.cs" />
     <Compile Include="WfTaskHistory\WfTaskHistoryService.cs" />
+    <Compile Include="WfTask\EmailConfigEntity.cs" />
     <Compile Include="WfTask\WfTaskBLL.cs" />
     <Compile Include="WfTask\WfTaskEntity.cs" />
     <Compile Include="WfTask\WfTaskIBLL.cs" />

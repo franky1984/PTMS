@@ -83,3 +83,6 @@ E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Ioc\bin\Debug\Microsoft.Practices.Unity.RegistrationByConvention.xml
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Ioc\obj\Debug\Learun.Ioc.dll
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Ioc\obj\Debug\Learun.Ioc.pdb
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Ioc\obj\Debug\Learun.Ioc.csprojAssemblyReference.cache
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Ioc\obj\Debug\Learun.Ioc.csproj.CoreCompileInputs.cache
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Ioc\obj\Debug\Learun.Ioc.csproj.CopyComplete

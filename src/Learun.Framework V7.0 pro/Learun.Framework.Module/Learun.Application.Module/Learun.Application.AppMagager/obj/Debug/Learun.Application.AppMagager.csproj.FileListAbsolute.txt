@@ -340,4 +340,11 @@ E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.AppMagager\bin\Debug\Microsoft.Practices.ServiceLocation.xml
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.AppMagager\obj\Debug\Learun.Application.AppMagager.dll
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.AppMagager\obj\Debug\Learun.Application.AppMagager.pdb
-E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.AppMagager\obj\Debug\Learun.Application.AppMagager.csprojResolveAssemblyReference.cache
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.AppMagager\bin\Debug\Learun.DataBase.Repository.dll.config
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.AppMagager\bin\Debug\Learun.Util.dll.config
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.AppMagager\bin\Debug\Learun.Application.Base.dll.config
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.AppMagager\bin\Debug\Learun.Application.Organization.dll.config
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.AppMagager\obj\Debug\Learun.Application.AppMagager.csprojAssemblyReference.cache
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.AppMagager\obj\Debug\Learun.Application.AppMagager.csproj.CoreCompileInputs.cache
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.AppMagager\obj\Debug\Learun.Application.AppMagager.csproj.CopyComplete
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.AppMagager\bin\Debug\Learun.DataBase.dll.config

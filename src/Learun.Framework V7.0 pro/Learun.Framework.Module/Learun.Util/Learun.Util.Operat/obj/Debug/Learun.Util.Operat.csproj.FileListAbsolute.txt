@@ -338,6 +338,13 @@ E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Util\Learun.Util.Operat\bin\Debug\Microsoft.Practices.Unity.Configuration.xml
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Util\Learun.Util.Operat\bin\Debug\Microsoft.Practices.ServiceLocation.pdb
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Util\Learun.Util.Operat\bin\Debug\Microsoft.Practices.ServiceLocation.xml
-E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Util\Learun.Util.Operat\obj\Debug\Learun.Util.Operat.csprojResolveAssemblyReference.cache
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Util\Learun.Util.Operat\obj\Debug\Learun.Util.Operat.dll
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Util\Learun.Util.Operat\obj\Debug\Learun.Util.Operat.pdb
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Util\Learun.Util.Operat\bin\Debug\Learun.Application.Organization.dll.config
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Util\Learun.Util.Operat\bin\Debug\Learun.Application.Base.dll.config
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Util\Learun.Util.Operat\bin\Debug\Learun.Util.dll.config
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Util\Learun.Util.Operat\bin\Debug\Learun.DataBase.dll.config
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Util\Learun.Util.Operat\obj\Debug\Learun.Util.Operat.csprojAssemblyReference.cache
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Util\Learun.Util.Operat\obj\Debug\Learun.Util.Operat.csproj.CoreCompileInputs.cache
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Util\Learun.Util.Operat\obj\Debug\Learun.Util.Operat.csproj.CopyComplete
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Util\Learun.Util.Operat\bin\Debug\Learun.DataBase.Repository.dll.config

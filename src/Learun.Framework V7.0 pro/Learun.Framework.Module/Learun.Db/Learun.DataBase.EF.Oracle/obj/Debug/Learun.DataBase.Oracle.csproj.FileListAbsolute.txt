@@ -194,6 +194,10 @@ E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Db\Learun.DataBase.EF.Oracle\bin\Debug\NPOI.xml
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Db\Learun.DataBase.EF.Oracle\bin\Debug\Newtonsoft.Json.xml
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Db\Learun.DataBase.EF.Oracle\bin\Debug\LumiSoft.Net.xml
-E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Db\Learun.DataBase.EF.Oracle\obj\Debug\Learun.DataBase.Oracle.csprojResolveAssemblyReference.cache
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Db\Learun.DataBase.EF.Oracle\obj\Debug\Learun.DataBase.Oracle.dll
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Db\Learun.DataBase.EF.Oracle\obj\Debug\Learun.DataBase.Oracle.pdb
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Db\Learun.DataBase.EF.Oracle\bin\Debug\Learun.Util.dll.config
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Db\Learun.DataBase.EF.Oracle\bin\Debug\Learun.DataBase.dll.config
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Db\Learun.DataBase.EF.Oracle\obj\Debug\Learun.DataBase.Oracle.csprojAssemblyReference.cache
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Db\Learun.DataBase.EF.Oracle\obj\Debug\Learun.DataBase.Oracle.csproj.CoreCompileInputs.cache
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Db\Learun.DataBase.EF.Oracle\obj\Debug\Learun.DataBase.Oracle.csproj.CopyComplete

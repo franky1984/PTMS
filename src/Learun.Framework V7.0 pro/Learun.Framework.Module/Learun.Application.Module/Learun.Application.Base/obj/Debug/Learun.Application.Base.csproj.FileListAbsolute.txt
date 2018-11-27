@@ -372,6 +372,12 @@ E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.Base\bin\Debug\Microsoft.Practices.ServiceLocation.pdb
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.Base\bin\Debug\Microsoft.Practices.ServiceLocation.xml
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.Base\bin\Debug\ServiceStack.Common.xml
-E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.Base\obj\Debug\Learun.Application.Base.csprojResolveAssemblyReference.cache
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.Base\obj\Debug\Learun.Application.Base.dll
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.Base\obj\Debug\Learun.Application.Base.pdb
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.Base\bin\Debug\Learun.Application.Organization.dll.config
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.Base\bin\Debug\Learun.DataBase.Repository.dll.config
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.Base\bin\Debug\Learun.DataBase.dll.config
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.Base\bin\Debug\Learun.Util.dll.config
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.Base\obj\Debug\Learun.Application.Base.csprojAssemblyReference.cache
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.Base\obj\Debug\Learun.Application.Base.csproj.CoreCompileInputs.cache
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.Base\obj\Debug\Learun.Application.Base.csproj.CopyComplete

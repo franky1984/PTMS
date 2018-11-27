@@ -226,6 +226,11 @@ E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.CRM\bin\Debug\Microsoft.Practices.Unity.Configuration.xml
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.CRM\bin\Debug\Microsoft.Practices.ServiceLocation.pdb
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.CRM\bin\Debug\Microsoft.Practices.ServiceLocation.xml
-E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.CRM\obj\Debug\Learun.Application.CRM.csprojResolveAssemblyReference.cache
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.CRM\obj\Debug\Learun.Application.CRM.dll
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.CRM\obj\Debug\Learun.Application.CRM.pdb
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.CRM\bin\Debug\Learun.DataBase.Repository.dll.config
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.CRM\bin\Debug\Learun.Util.dll.config
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.CRM\bin\Debug\Learun.DataBase.dll.config
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.CRM\obj\Debug\Learun.Application.CRM.csprojAssemblyReference.cache
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.CRM\obj\Debug\Learun.Application.CRM.csproj.CoreCompileInputs.cache
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Application.Module\Learun.Application.CRM\obj\Debug\Learun.Application.CRM.csproj.CopyComplete

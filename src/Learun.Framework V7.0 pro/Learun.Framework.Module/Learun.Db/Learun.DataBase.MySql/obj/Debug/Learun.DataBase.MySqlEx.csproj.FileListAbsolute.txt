@@ -194,6 +194,10 @@ E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Db\Learun.DataBase.MySql\bin\Debug\NPOI.xml
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Db\Learun.DataBase.MySql\bin\Debug\Newtonsoft.Json.xml
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Db\Learun.DataBase.MySql\bin\Debug\LumiSoft.Net.xml
-E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Db\Learun.DataBase.MySql\obj\Debug\Learun.DataBase.MySqlEx.csprojResolveAssemblyReference.cache
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Db\Learun.DataBase.MySql\obj\Debug\Learun.DataBase.MySqlEx.dll
 E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Db\Learun.DataBase.MySql\obj\Debug\Learun.DataBase.MySqlEx.pdb
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Db\Learun.DataBase.MySql\bin\Debug\Learun.Util.dll.config
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Db\Learun.DataBase.MySql\bin\Debug\Learun.DataBase.dll.config
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Db\Learun.DataBase.MySql\obj\Debug\Learun.DataBase.MySqlEx.csprojAssemblyReference.cache
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Db\Learun.DataBase.MySql\obj\Debug\Learun.DataBase.MySqlEx.csproj.CoreCompileInputs.cache
+E:\Project\酒店临时工管理系统\git\src\Learun.Framework V7.0 pro\Learun.Framework.Module\Learun.Db\Learun.DataBase.MySql\obj\Debug\Learun.DataBase.MySqlEx.csproj.CopyComplete

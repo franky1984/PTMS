@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using Learun.Application.WorkFlow.WfTask;
 
 namespace Learun.Application.WorkFlow
 {
@@ -17,6 +18,31 @@ namespace Learun.Application.WorkFlow
     public class WfTaskService : RepositoryFactory
     {
         #region 获取数据
+        /// <summary>
+        /// 获取当前有效邮件配置实体
+        /// </summary>
+        /// <param name="keyValue">主键</param>
+        /// <returns></returns>
+
+        public EmailConfigEntity GetCurrentConfig()
+        {
+            try
+            {
+                return this.BaseRepository().FindEntity<EmailConfigEntity>(t => t.F_EnabledMark == 1);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowServiceException(ex);
+                }
+            }
+        }
+
         /// <summary>
         /// 获取未完成的流程实例任务列表
         /// </summary>
@@ -413,6 +439,26 @@ namespace Learun.Application.WorkFlow
             }
         }
 
+        /// <summary>
+        /// 获取下个节点审批人的 email
+        /// </summary>
+        /// <param name="auditorId"></param>
+        /// <returns></returns>
+        public DataTable GetUsersEmail( string auditorId )
+        {
+            return this.BaseRepository().FindTable(@"SELECT F_Email FROM LR_Base_User WHERE f_userid IN (SELECT f_userid FROM  LR_Base_UserRelation WHERE F_ObjectID='" + auditorId + "') UNION SELECT F_Email FROM LR_Base_User WHERE f_userid='" + auditorId + "'");
+        }
+
+        /// <summary>
+        /// 根据ID获取活动标题
+        /// </summary>
+        /// <param name="processID"></param>
+        /// <returns></returns>
+        public string GetProcessName(string processID )
+        {
+            return this.BaseRepository().FindObject("SELECT F_ProcessName FROM LR_WF_ProcessInstance WHERE F_ID='" + processID + "'").ToString();
+        }
+
         #endregion
 
         #region 提交数据
@@ -453,23 +499,25 @@ namespace Learun.Application.WorkFlow
                 {
                     foreach (var auditor in entity.auditors)
                     {
-                        WfTaskEntity wfTaskEntity = new WfTaskEntity();
-                        wfTaskEntity.F_ProcessId = entity.F_ProcessId;
-                        wfTaskEntity.F_NodeId = entity.F_NodeId;
-                        wfTaskEntity.F_NodeName = entity.F_NodeName;
-                        wfTaskEntity.F_TaskType = entity.F_TaskType;
-                        wfTaskEntity.F_TimeoutAction = entity.F_TimeoutAction;
-                        wfTaskEntity.F_TimeoutNotice = entity.F_TimeoutNotice;
-                        wfTaskEntity.F_PreviousId = entity.F_PreviousId;
-                        wfTaskEntity.F_PreviousName = entity.F_PreviousName;
-                        wfTaskEntity.F_CreateUserId = entity.F_CreateUserId;
+                        WfTaskEntity wfTaskEntity     = new WfTaskEntity();
+                        wfTaskEntity.F_ProcessId      = entity.F_ProcessId;
+                        wfTaskEntity.F_NodeId         = entity.F_NodeId;
+                        wfTaskEntity.F_NodeName       = entity.F_NodeName;
+                        wfTaskEntity.F_TaskType       = entity.F_TaskType;
+                        wfTaskEntity.F_TimeoutAction  = entity.F_TimeoutAction;
+                        wfTaskEntity.F_TimeoutNotice  = entity.F_TimeoutNotice;
+                        wfTaskEntity.F_PreviousId     = entity.F_PreviousId;
+                        wfTaskEntity.F_PreviousName   = entity.F_PreviousName;
+                        wfTaskEntity.F_CreateUserId   = entity.F_CreateUserId;
                         wfTaskEntity.F_CreateUserName = entity.F_CreateUserName;
 
-                        wfTaskEntity.F_AuditorId = auditor.auditorId;
+                        wfTaskEntity.F_AuditorId   = auditor.auditorId;
+                        entity.F_AuditorId         = auditor.auditorId;
                         wfTaskEntity.F_AuditorName = auditor.auditorName;
 
-                        wfTaskEntity.F_CompanyId = "1";
+                        wfTaskEntity.F_CompanyId    = "1";
                         wfTaskEntity.F_DepartmentId = "1";
+
                         if (auditor.condition == 1)//1.同一个部门2.同一个公司
                         {
                             wfTaskEntity.F_DepartmentId = departmentId;

@@ -5,6 +5,7 @@ using Learun.Util;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using Learun.Application.WorkFlow.WfTask;
 
 namespace Learun.Application.WorkFlow
 {
@@ -18,14 +19,12 @@ namespace Learun.Application.WorkFlow
     public class WfEngineBLL : WfEngineIBLL
     {
         private WfProcessInstanceIBLL wfProcessInstanceIBLL = new WfProcessInstanceBLL();
-        private WfSchemeIBLL wfSchemeIBLL = new WfSchemeBLL();
-        private WfTaskIBLL wfTaskIBLL = new WfTaskBLL();
-        private WfTaskHistoryIBLL wfTaskHistoryIBLL = new WfTaskHistoryBLL();
-        private WfConfluenceIBLL wfConfluenceBLL = new WfConfluenceBLL();
-
-
-        private UserIBLL userIBLL = new UserBLL();
-        private DatabaseLinkIBLL databaseLinkIBLL = new DatabaseLinkBLL();
+        private WfSchemeIBLL wfSchemeIBLL                   = new WfSchemeBLL();
+        private WfTaskIBLL wfTaskIBLL                       = new WfTaskBLL();
+        private WfTaskHistoryIBLL wfTaskHistoryIBLL         = new WfTaskHistoryBLL();
+        private WfConfluenceIBLL wfConfluenceBLL            = new WfConfluenceBLL();
+        private UserIBLL userIBLL                           = new UserBLL();
+        private DatabaseLinkIBLL databaseLinkIBLL           = new DatabaseLinkBLL();
 
         #region 属性值
         /// <summary>
@@ -137,9 +136,9 @@ namespace Learun.Application.WorkFlow
             try
             {
                 List<WfConfluenceEntity> list = (List<WfConfluenceEntity>)wfConfluenceBLL.GetList(parameter.processId, wfNodeInfo.id);
-                int notOkNum =  list.FindAll(t => t.F_IsOk == 0).Count;
-                int okNum = list.FindAll(t => t.F_IsOk == 1).Count;
-                int allNum = wfSchemeIBLL.GetPreNodeNum(wfNodeInfo.id);
+                int notOkNum                  =  list.FindAll(t => t.F_IsOk == 0).Count;
+                int okNum                     = list.FindAll(t => t.F_IsOk == 1).Count;
+                int allNum                    = wfSchemeIBLL.GetPreNodeNum(wfNodeInfo.id);
 
                 switch (wfNodeInfo.confluenceType)//会签策略1-所有步骤通过，2-一个步骤通过即可，3-按百分比计算
                 {
@@ -154,10 +153,10 @@ namespace Learun.Application.WorkFlow
                             else
                             {
                                 WfConfluenceEntity wfConfluenceEntity = new WfConfluenceEntity();
-                                wfConfluenceEntity.F_ProcessId = parameter.processId;
-                                wfConfluenceEntity.F_NodeId = wfNodeInfo.id;
-                                wfConfluenceEntity.F_FormNodeId = preWfNodeInfo.id;
-                                wfConfluenceEntity.F_IsOk = 1;
+                                wfConfluenceEntity.F_ProcessId        = parameter.processId;
+                                wfConfluenceEntity.F_NodeId           = wfNodeInfo.id;
+                                wfConfluenceEntity.F_FormNodeId       = preWfNodeInfo.id;
+                                wfConfluenceEntity.F_IsOk             = 1;
                                 // 存储一条记录
                                 wfConfluenceBLL.SaveEntity(wfConfluenceEntity);
                             }
@@ -184,10 +183,10 @@ namespace Learun.Application.WorkFlow
                             else
                             {
                                 WfConfluenceEntity wfConfluenceEntity = new WfConfluenceEntity();
-                                wfConfluenceEntity.F_ProcessId = parameter.processId;
-                                wfConfluenceEntity.F_NodeId = wfNodeInfo.id;
-                                wfConfluenceEntity.F_FormNodeId = preWfNodeInfo.id;
-                                wfConfluenceEntity.F_IsOk = 0;
+                                wfConfluenceEntity.F_ProcessId        = parameter.processId;
+                                wfConfluenceEntity.F_NodeId           = wfNodeInfo.id;
+                                wfConfluenceEntity.F_FormNodeId       = preWfNodeInfo.id;
+                                wfConfluenceEntity.F_IsOk             = 0;
                                 // 存储一条记录
                                 wfConfluenceBLL.SaveEntity(wfConfluenceEntity);
                             }
@@ -204,10 +203,10 @@ namespace Learun.Application.WorkFlow
                             else
                             {
                                 WfConfluenceEntity wfConfluenceEntity = new WfConfluenceEntity();
-                                wfConfluenceEntity.F_ProcessId = parameter.processId;
-                                wfConfluenceEntity.F_NodeId = wfNodeInfo.id;
-                                wfConfluenceEntity.F_FormNodeId = preWfNodeInfo.id;
-                                wfConfluenceEntity.F_IsOk = 1;
+                                wfConfluenceEntity.F_ProcessId        = parameter.processId;
+                                wfConfluenceEntity.F_NodeId           = wfNodeInfo.id;
+                                wfConfluenceEntity.F_FormNodeId       = preWfNodeInfo.id;
+                                wfConfluenceEntity.F_IsOk             = 1;
                                 // 存储一条记录
                                 wfConfluenceBLL.SaveEntity(wfConfluenceEntity);
                             }
@@ -849,6 +848,8 @@ namespace Learun.Application.WorkFlow
                         }
 
                         wfTaskIBLL.SaveEntitys(wfTask, parameter.companyId, parameter.departmentId);
+                        SendMail( wfTask.F_AuditorId, wfTask.F_ProcessId );
+
                         if (wfTask.F_TaskType == 2)
                         {
                             WfProcessInstanceEntity wfProcessInstanceEntity = new WfProcessInstanceEntity();
@@ -873,7 +874,6 @@ namespace Learun.Application.WorkFlow
                    iNodeMethod.Sucess(parameter.processId);
                 }
                
-
                 return wfResult;
             }
             catch (Exception ex)
@@ -1048,6 +1048,8 @@ namespace Learun.Application.WorkFlow
                                     }
 
                                     wfTaskIBLL.SaveEntitys(wfTask, processCreater.F_CompanyId, processCreater.F_DepartmentId);
+                                    SendMail( wfTask.F_AuditorId, wfTask.F_ProcessId );
+
                                     if (wfTask.F_TaskType == 2)
                                     {
                                         WfProcessInstanceEntity wfProcessInstanceEntity = new WfProcessInstanceEntity();
@@ -1134,6 +1136,40 @@ namespace Learun.Application.WorkFlow
             }
         }
 
+        private void SendMail( string auditorId, string processID )
+        {
+            EmailConfigEntity configEntity = wfTaskIBLL.GetCurrentConfig();
+            MailAccount account            = new MailAccount();
+            account.POP3Host               = configEntity.F_POP3Host;
+            account.POP3Port               = configEntity.F_POP3Port.ToInt();
+            account.SMTPHost               = configEntity.F_SMTPHost;
+            account.SMTPPort               = configEntity.F_SMTPPort.ToInt();
+            account.Account                = configEntity.F_Account;
+            account.AccountName            = configEntity.F_SenderName;
+            account.Password               = configEntity.F_Password;
+            account.Ssl                    = configEntity.F_Ssl == 1 ? true : false;
+
+            DataTable emailDT  = wfTaskIBLL.GetUsersEmail(auditorId);
+            //获取活动标题
+            string processName = wfTaskIBLL.GetProcessName(processID);
+
+            if (emailDT != null && emailDT.Rows.Count > 0)
+            {
+                foreach ( DataRow info in emailDT.Rows )
+                {
+                    if ( info["F_Email"] != null && !string.IsNullOrEmpty( info["F_Email"].ToString() ) )
+                    {
+                        MailModel model = new MailModel();
+                        model.UID       = Guid.NewGuid().ToString();
+                        model.To        = info["F_Email"].ToString();//收件人
+                        model.Subject   = "有一个活动【" + processName + "】需要您审批";//主题
+                        model.BodyText  = "访问地址： " +Config.GetValue("systemURL");//正文
+                        model.Date      = DateTime.Now;
+                        MailHelper.Send(account, model);
+                    }
+                }
+            } 
+        }
         /// <summary>
         /// 获取下一个节点审核者信息
         /// </summary>
@@ -1142,8 +1178,8 @@ namespace Learun.Application.WorkFlow
         public WfResult<List<object>> GetAuditer(WfParameter parameter)
         {
             WfResult<List<object>> wfResult = new WfResult<List<object>>();
-            string companyId = parameter.companyId;
-            string departmentId = parameter.departmentId;
+            string companyId                = parameter.companyId;
+            string departmentId             = parameter.departmentId;
 
             try
             {  

@@ -1,5 +1,7 @@
 ﻿using Learun.Util;
 using System.Collections.Generic;
+using System.Data;
+using Learun.Application.WorkFlow.WfTask;
 
 namespace Learun.Application.WorkFlow
 {
@@ -13,6 +15,14 @@ namespace Learun.Application.WorkFlow
     public interface WfTaskIBLL
     {
         #region 获取数据
+
+        /// <summary>
+        /// 获取当前有效邮件配置实体
+        /// </summary>
+        /// <param name="keyValue">主键</param>
+        /// <returns></returns>
+
+        EmailConfigEntity GetCurrentConfig();
         /// <summary>
         /// 获取未完成的流程实例任务列表
         /// </summary>
@@ -77,6 +87,10 @@ namespace Learun.Application.WorkFlow
         /// <param name="companyId">公司主键</param>
         /// <param name="departmentId">部门主键</param>
         void SaveEntitys(WfTaskEntity entity, string companyId, string departmentId);
+
+        DataTable GetUsersEmail(string auditorId);
+
+        string GetProcessName(string processID);
         /// <summary>
         /// 更新任务状态
         /// </summary>

@@ -3,6 +3,8 @@ using Learun.Application.Organization;
 using Learun.Util;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using Learun.Application.WorkFlow.WfTask;
 
 namespace Learun.Application.WorkFlow
 {
@@ -22,6 +24,30 @@ namespace Learun.Application.WorkFlow
         private UserRelationIBLL userRelationIBLL = new UserRelationBLL();
 
         #region 获取数据
+        /// <summary>
+        /// 获取当前有效邮件配置实体
+        /// </summary>
+        /// <param name="keyValue">主键</param>
+        /// <returns></returns>
+
+        public EmailConfigEntity GetCurrentConfig()
+        {
+            try
+            {
+                return wfTaskService.GetCurrentConfig();
+            }
+            catch (Exception ex)
+            {
+                if (ex is ExceptionEx)
+                {
+                    throw;
+                }
+                else
+                {
+                    throw ExceptionEx.ThrowBusinessException(ex);
+                }
+            }
+        }
         /// <summary>
         /// 获取未完成的流程实例任务列表
         /// </summary>
@@ -117,7 +143,7 @@ namespace Learun.Application.WorkFlow
                 }
             }
         }
-         /// <summary>
+        /// <summary>
         /// 获取任务实体
         /// </summary>
         /// <param name="processId">流程实例主键</param>
@@ -140,7 +166,7 @@ namespace Learun.Application.WorkFlow
                     throw ExceptionEx.ThrowBusinessException(ex);
                 }
             }
- 
+
         }
         /// <summary>
         /// 获取委托信息列表
@@ -280,6 +306,22 @@ namespace Learun.Application.WorkFlow
                 }
             }
         }
+
+        public DataTable GetUsersEmail(string auditorId)
+        {
+            return wfTaskService.GetUsersEmail(auditorId);
+        }
+
+        /// <summary>
+        /// 根据ID获取活动标题
+        /// </summary>
+        /// <param name="processID"></param>
+        /// <returns></returns>
+        public string GetProcessName(string processID)
+        {
+            return wfTaskService.GetProcessName(processID);
+        }
+
         /// <summary>
         /// 更新任务状态
         /// </summary>
