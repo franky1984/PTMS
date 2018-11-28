@@ -439,21 +439,36 @@ namespace IdentityCard
                         }
                         else if ( dt.Rows[ 0 ][ "F_Second" ] == null || string.IsNullOrEmpty( dt.Rows[ 0 ][ "F_Second" ].ToString() ) )
                         {
+                            //获取中午吃饭时间（分钟）
+                            int mealtime = SqlDbHelper.ExecuteScalar( "SELECT F_ItemValue FROM LR_Base_DataItemDetail WHERE F_ItemDetailId='956f9dd1-f475-495c-aa63-fc2c9efd0b30'" );
+
                             if ( DateTime.Compare( time, Convert.ToDateTime( orderDT.Rows[ 0 ][ "F_EndTime" ].ToString() ) ) < 0 )
                             {
                                 //获取早退需扣的金额
                                 int leaveEarlyPrice = SqlDbHelper.ExecuteScalar( "SELECT F_ItemValue FROM LR_Base_DataItemDetail WHERE F_ItemDetailId='131db78a-43b3-47c4-b89b-89ef9280fbd0'" );
 
-                                TimeSpan ts = Convert.ToDateTime( orderDT.Rows[ 0 ][ "F_EndTime" ].ToString() ) - Convert.ToDateTime( orderDT.Rows[ 0 ][ "F_StartTime" ].ToString() );
-                                price       = ( price * ts.Hours ) - leaveEarlyPrice;
+//                                TimeSpan ts = Convert.ToDateTime( orderDT.Rows[ 0 ][ "F_EndTime" ].ToString() ).AddMinutes( -mealtime ) - Convert.ToDateTime( orderDT.Rows[ 0 ][ "F_StartTime" ].ToString() );
+//                                price       = ( price * ts.Hours ) - leaveEarlyPrice;
+//                                list.Add( new SqlParameter( "@f_realDaySalary", price ) );
+
+                                TimeSpan ts1 = new TimeSpan( time.AddMinutes( -mealtime ).Ticks );
+                                TimeSpan ts2 = new TimeSpan( Convert.ToDateTime( orderDT.Rows[ 0 ][ "F_StartTime" ].ToString() ).Ticks );
+                                TimeSpan ts3 = ts1.Subtract( ts2 ).Duration();
+                                price = price * ts3.Hours;
+
+                                if ( ts3.Minutes >= 30 )
+                                {
+                                    //加班如果超过半小时就发半小时工资
+                                    price = price + ( price / 2 );
+                                }
+
                                 list.Add( new SqlParameter( "@f_realDaySalary", price ) );
                                 list.Add( new SqlParameter( "@f_LeaveEarly", 1 ) );          //早退
                             }
                             else
                             {
                                 list.Add( new SqlParameter( "@f_LeaveEarly", 0 ) );          //正常下班
-
-                                TimeSpan ts1 = new TimeSpan( time.Ticks );
+                                TimeSpan ts1 = new TimeSpan( time.AddMinutes( -mealtime ).Ticks );
                                 TimeSpan ts2 = new TimeSpan( Convert.ToDateTime( orderDT.Rows[ 0 ][ "F_StartTime" ].ToString() ).Ticks );
                                 TimeSpan ts  = ts1.Subtract( ts2 ).Duration();
                                 price        = price * ts.Hours;
