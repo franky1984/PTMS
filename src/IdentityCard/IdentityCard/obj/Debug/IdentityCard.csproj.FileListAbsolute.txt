@@ -8,3 +8,13 @@ E:\Project\酒店临时工管理系统\code\IdentityCard\IdentityCard\obj\Debug\
 E:\Project\酒店临时工管理系统\code\IdentityCard\IdentityCard\obj\Debug\IdentityCard.Form1.resources
 E:\Project\酒店临时工管理系统\code\IdentityCard\IdentityCard\bin\Debug\IdentityCard.exe.config
 E:\Project\酒店临时工管理系统\code\IdentityCard\IdentityCard\obj\Debug\IdentityCard.csprojResolveAssemblyReference.cache
+E:\Project\酒店临时工管理系统\git\src\IdentityCard\IdentityCard\bin\Debug\IdentityCard.exe.config
+E:\Project\酒店临时工管理系统\git\src\IdentityCard\IdentityCard\bin\Debug\IdentityCard.exe
+E:\Project\酒店临时工管理系统\git\src\IdentityCard\IdentityCard\bin\Debug\IdentityCard.pdb
+E:\Project\酒店临时工管理系统\git\src\IdentityCard\IdentityCard\obj\Debug\IdentityCard.Form1.resources
+E:\Project\酒店临时工管理系统\git\src\IdentityCard\IdentityCard\obj\Debug\IdentityCard.Properties.Resources.resources
+E:\Project\酒店临时工管理系统\git\src\IdentityCard\IdentityCard\obj\Debug\IdentityCard.csproj.GenerateResource.cache
+E:\Project\酒店临时工管理系统\git\src\IdentityCard\IdentityCard\obj\Debug\IdentityCard.csproj.CoreCompileInputs.cache
+E:\Project\酒店临时工管理系统\git\src\IdentityCard\IdentityCard\obj\Debug\IdentityCard.csproj.CopyComplete
+E:\Project\酒店临时工管理系统\git\src\IdentityCard\IdentityCard\obj\Debug\IdentityCard.exe
+E:\Project\酒店临时工管理系统\git\src\IdentityCard\IdentityCard\obj\Debug\IdentityCard.pdb

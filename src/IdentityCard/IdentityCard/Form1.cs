@@ -19,8 +19,8 @@ namespace IdentityCard
 {
     public partial class Form1 : Form
     {
-        [DllImport("DLL_File.dll", CallingConvention = CallingConvention.Cdecl)]//注意这里的调用方式为Cdecl
-        static extern int unpack(byte[] szSrcWltData, byte[] szDstPicData, int iIsSaveToBmp);
+        [DllImport( "DLL_File.dll", CallingConvention = CallingConvention.Cdecl )]//注意这里的调用方式为Cdecl
+        static extern int unpack( byte[] szSrcWltData, byte[] szDstPicData, int iIsSaveToBmp );
 
         private TcpListener tcpipServer;
         TcpClient client = null;
@@ -34,27 +34,27 @@ namespace IdentityCard
             ReadNewModel();
         }
 
-        private void btnStart_Click(object sender, EventArgs e)
+        private void btnStart_Click( object sender, EventArgs e )
         {
-            System.Net.IPHostEntry myEntry = System.Net.Dns.GetHostByName(System.Net.Dns.GetHostName());
-            string ipAddress = myEntry.AddressList[0].ToString();
+            System.Net.IPHostEntry myEntry = System.Net.Dns.GetHostByName( System.Net.Dns.GetHostName() );
+            string ipAddress = myEntry.AddressList[ 0 ].ToString();
 
-            tcpipServer = new TcpListener(IPAddress.Parse(ipAddress), 8234);
+            tcpipServer = new TcpListener( IPAddress.Parse( ipAddress ), 8234 );
             tcpipServer.Start();
 
             //创立新线程循环搜索客户端并读取数据
-            Thread th = new Thread(new ThreadStart(GetData));
+            Thread th = new Thread( new ThreadStart( GetData ) );
             th.Start();
 
             btnStart.Enabled = false;
-            btnStart.Text    = "已启动";
+            btnStart.Text = "已启动";
         }
 
         public void GetData()
         {
-            while (true)
+            while ( true )
             {
-                if( !checkStop )
+                if ( !checkStop )
                 {
                     break;
                 }
@@ -64,89 +64,89 @@ namespace IdentityCard
                     client = tcpipServer.AcceptTcpClient();
                     ns = client.GetStream();
                 }
-                catch( Exception e )
+                catch ( Exception e )
                 {
 
                 }
 
                 try
                 {
-                    if (ns.CanRead)
+                    if ( ns.CanRead )
                     {
-                        lock (ns)
+                        lock ( ns )
                         {
                             //报文全部转换成16进制
                             StringBuilder sb = new StringBuilder();
                             do
                             {
-                                byte[] temp = new byte[200];
-                                int num = ns.Read(temp, 0, temp.Length);
+                                byte[] temp = new byte[ 200 ];
+                                int num = ns.Read( temp, 0, temp.Length );
 
-                                for (int i = 0; i < temp.Length; i++)
+                                for ( int i = 0; i < temp.Length; i++ )
                                 {
-                                    sb.AppendFormat("{0:x2}" + " ", temp[i]);
+                                    sb.AppendFormat( "{0:x2}" + " ", temp[ i ] );
                                 }
 
-                                Thread.Sleep(20);
+                                Thread.Sleep( 20 );
 
-                            } while (ns.DataAvailable);
+                            } while ( ns.DataAvailable );
 
                             int a = sb.ToString().ToUpper().Length;
 
-                            string[] str_all = sb.ToString().ToUpper().Replace(" ", "").Split(new string[] { "1000400" }, StringSplitOptions.RemoveEmptyEntries);
+                            string[] str_all = sb.ToString().ToUpper().Replace( " ", "" ).Split( new string[] { "1000400" }, StringSplitOptions.RemoveEmptyEntries );
 
-                            string str_Name    = str_all[1].Trim().Substring(0, 60);
-                            string str_Sex     = str_all[1].Trim().Substring(60, 4);
-                            string str_Mz      = str_all[1].Trim().Substring(64, 8);
-                            string str_Birth   = str_all[1].Trim().Substring(72, 32);
-                            string str_Address = str_all[1].Trim().Substring(104, 140);
-                            string str_idc     = str_all[1].Trim().Substring(244, 72);
+                            string str_Name = str_all[ 1 ].Trim().Substring( 0, 60 );
+                            string str_Sex = str_all[ 1 ].Trim().Substring( 60, 4 );
+                            string str_Mz = str_all[ 1 ].Trim().Substring( 64, 8 );
+                            string str_Birth = str_all[ 1 ].Trim().Substring( 72, 32 );
+                            string str_Address = str_all[ 1 ].Trim().Substring( 104, 140 );
+                            string str_idc = str_all[ 1 ].Trim().Substring( 244, 72 );
 
-                            label2.Text      = UnicodeToCharacter(str_Name);
-                            label3.Text      = UnicodeToCharacter(str_Sex) == "1" ? "男" : "女";
-                            label4.Text      = lstMZ[UnicodeToCharacter( str_Mz)];
-                            string birth     = UnicodeToCharacter(str_Birth);
-                            label5.Text      = birth.Substring(0, 4);
-                            label6.Text      = birth.Substring( 4, 2 ).TrimStart('0');
-                            label7.Text      = birth.Substring( 6, 2 ).TrimStart( '0' );
-                            label9.Text      = UnicodeToCharacter(str_Address);
-                            label8.Text      = UnicodeToCharacter(str_idc);
+                            label2.Text = UnicodeToCharacter( str_Name );
+                            label3.Text = UnicodeToCharacter( str_Sex ) == "1" ? "男" : "女";
+                            label4.Text = lstMZ[ UnicodeToCharacter( str_Mz ) ];
+                            string birth = UnicodeToCharacter( str_Birth );
+                            label5.Text = birth.Substring( 0, 4 );
+                            label6.Text = birth.Substring( 4, 2 ).TrimStart( '0' );
+                            label7.Text = birth.Substring( 6, 2 ).TrimStart( '0' );
+                            label9.Text = UnicodeToCharacter( str_Address );
+                            label8.Text = UnicodeToCharacter( str_idc );
 
-                            
-                            byte[] byBgrBuffer = new byte[38556];    //解码后图片BGR编码值
-                            byte[] byRgbBuffer = new byte[38808];    //解码后图片RGB编码值
-                            byte[] byBmpBuffer = new byte[38862];    //解码后图片RGB编码值
-                            unpack(HexStringToByteArray(str_all[1].Trim().Substring(512, 2048)), byBgrBuffer, 0);
+
+                            byte[] byBgrBuffer = new byte[ 38556 ];    //解码后图片BGR编码值
+                            byte[] byRgbBuffer = new byte[ 38808 ];    //解码后图片RGB编码值
+                            byte[] byBmpBuffer = new byte[ 38862 ];    //解码后图片RGB编码值
+                            unpack( HexStringToByteArray( str_all[ 1 ].Trim().Substring( 512, 2048 ) ), byBgrBuffer, 0 );
 
                             //拼接BMP图片格式头，14字节
-                            byte[] byBmpHead = new byte[14] { 0x42, 0x4D, 0xCE, 0x97, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x36, 0x00, 0x00, 0x00 };
-                            Array.Copy(byBmpHead, 0, byBmpBuffer, 0, 14);
+                            byte[] byBmpHead = new byte[ 14 ] { 0x42, 0x4D, 0xCE, 0x97, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x36, 0x00, 0x00, 0x00 };
+                            Array.Copy( byBmpHead, 0, byBmpBuffer, 0, 14 );
 
                             //拼接BMP图像信息，40字节
-                            byte[] byBmpInfo = new byte[40]{   0x28,0x00,0x00,0x00,//结构所占用40字节    
+                            byte[] byBmpInfo = new byte[ 40 ]{   0x28,0x00,0x00,0x00,//结构所占用40字节    
                                 0x66,0x00,0x00,0x00,//位图的宽度102像素
                                 0x7E,0x00,0x00,0x00,//位图的高度126像素
                                 0x01,0x00,          //目标设备的级别必须为1
                                 0x18,0x00,          //每个像素所需的位数24
                                 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00//......其他信息省略为0
                             };
-                            Array.Copy(byBmpInfo, 0, byBmpBuffer, 14, 40);
+                            Array.Copy( byBmpInfo, 0, byBmpBuffer, 14, 40 );
                             //将解码后的BGR格式数据进行B、R互换
-                            int iResult = bgr2rgb(byBgrBuffer, byBgrBuffer.Length, byRgbBuffer, byRgbBuffer.Length, 102, 126);
-                            Array.Copy(byRgbBuffer, 0, byBmpBuffer, 54, iResult);
+                            int iResult = bgr2rgb( byBgrBuffer, byBgrBuffer.Length, byRgbBuffer, byRgbBuffer.Length, 102, 126 );
+                            Array.Copy( byRgbBuffer, 0, byBmpBuffer, 54, iResult );
                             //写入文件
                             int iBmpSize = 54 + iResult;
-                            tool_WriteOneFile(CardPath + label8.Text + ".bmp", byBmpBuffer, iBmpSize);
+                            tool_WriteOneFile( CardPath + label8.Text + ".bmp", byBmpBuffer, iBmpSize );
                             pictureBox2.BackgroundImage = Image.FromFile( CardPath + label8.Text + ".bmp" );
 
-                            Insert(label8.Text);
+                            Insert( label8.Text );
                         }
                     }
                 }
-                catch (Exception e)
+                catch ( Exception e )
                 {
-//                    client = tcpipServer.AcceptTcpClient();
-//                    ns = client.GetStream();
+                    //                    client = tcpipServer.AcceptTcpClient();
+                    //                    ns = client.GetStream();
                     continue;
                 }
 
@@ -161,16 +161,16 @@ namespace IdentityCard
         /// <param name="_i_byData">写入字节数组</param>
         /// <param name="_i_iDataSize">字节数组大小</param>
         /// <returns></returns>
-        static public bool tool_WriteOneFile(string _i_strFileName, byte[] _i_byData, int _i_iDataSize)
+        static public bool tool_WriteOneFile( string _i_strFileName, byte[] _i_byData, int _i_iDataSize )
         {
 
-            if (_i_iDataSize == 0)
+            if ( _i_iDataSize == 0 )
             {
                 return false;
             }
 
-            FileStream fileStream = new FileStream(_i_strFileName, FileMode.Create);
-            fileStream.Write(_i_byData, 0, _i_iDataSize);
+            FileStream fileStream = new FileStream( _i_strFileName, FileMode.Create );
+            fileStream.Write( _i_byData, 0, _i_iDataSize );
             fileStream.Flush();
             fileStream.Close();
 
@@ -187,62 +187,62 @@ namespace IdentityCard
         /// <param name="_i_iWidth">图片宽度（像素）</param>
         /// <param name="_i_iHeight">图片高度（像素）</param>
         /// <returns>>0 执行成功，函数执行成功后返回转换后的rgb格式数据大小</returns>
-        static public int bgr2rgb(byte[] _i_bySrc, int _i_iSrcSize, byte[] _o_byDst, int _i_iDstSize, int _i_iWidth, int _i_iHeight)
+        static public int bgr2rgb( byte[] _i_bySrc, int _i_iSrcSize, byte[] _o_byDst, int _i_iDstSize, int _i_iWidth, int _i_iHeight )
         {
             int iWidthSize = _i_iWidth * 3;
-            int iDstWidthSize = ((_i_iWidth * 3 + 3) / 4) * 4;
-            int iExternSize = ((_i_iWidth * 3 + 3) / 4) * 4 - _i_iWidth * 3;
+            int iDstWidthSize = ( ( _i_iWidth * 3 + 3 ) / 4 ) * 4;
+            int iExternSize = ( ( _i_iWidth * 3 + 3 ) / 4 ) * 4 - _i_iWidth * 3;
             int iDstSize = iDstWidthSize * _i_iHeight;
             int iPosX = 0;
             int iPosY = 0;
 
-            if (_i_iSrcSize != (iWidthSize * _i_iHeight))
+            if ( _i_iSrcSize != ( iWidthSize * _i_iHeight ) )
             {
                 return -1;
             }
 
-            if (_i_iDstSize < iDstSize)
+            if ( _i_iDstSize < iDstSize )
             {
                 return -2;
             }
 
-            for (iPosY = 0; iPosY < _i_iHeight; iPosY++)
+            for ( iPosY = 0; iPosY < _i_iHeight; iPosY++ )
             {
-                for (iPosX = 0; iPosX < _i_iWidth * 3; iPosX += 3)
+                for ( iPosX = 0; iPosX < _i_iWidth * 3; iPosX += 3 )
                 {
-                    _o_byDst[(iWidthSize + iExternSize) * iPosY + iPosX + 0] = _i_bySrc[iWidthSize * iPosY + iPosX + 2];
-                    _o_byDst[(iWidthSize + iExternSize) * iPosY + iPosX + 1] = _i_bySrc[iWidthSize * iPosY + iPosX + 1];
-                    _o_byDst[(iWidthSize + iExternSize) * iPosY + iPosX + 2] = _i_bySrc[iWidthSize * iPosY + iPosX + 0];
+                    _o_byDst[ ( iWidthSize + iExternSize ) * iPosY + iPosX + 0 ] = _i_bySrc[ iWidthSize * iPosY + iPosX + 2 ];
+                    _o_byDst[ ( iWidthSize + iExternSize ) * iPosY + iPosX + 1 ] = _i_bySrc[ iWidthSize * iPosY + iPosX + 1 ];
+                    _o_byDst[ ( iWidthSize + iExternSize ) * iPosY + iPosX + 2 ] = _i_bySrc[ iWidthSize * iPosY + iPosX + 0 ];
                 }
             }
 
             return iDstSize;
         }
 
-        private static byte[] HexStringToByteArray(string input)
+        private static byte[] HexStringToByteArray( string input )
         {
-            var result = new byte[(input.Length + 1) / 2];
+            var result = new byte[ ( input.Length + 1 ) / 2 ];
             var offset = 0;
-            if (input.Length % 2 == 1)
+            if ( input.Length % 2 == 1 )
             {
                 // If length of input is odd, the first character has an implicit 0 prepended.
-                result[0] = (byte)Convert.ToUInt32(input[0] + "", 16);
+                result[ 0 ] = (byte)Convert.ToUInt32( input[ 0 ] + "", 16 );
                 offset = 1;
             }
-            for (int i = 0; i < input.Length / 2; i++)
+            for ( int i = 0; i < input.Length / 2; i++ )
             {
-                result[i + offset] = (byte)Convert.ToUInt32(input.Substring(i * 2 + offset, 2), 16);
+                result[ i + offset ] = (byte)Convert.ToUInt32( input.Substring( i * 2 + offset, 2 ), 16 );
             }
             return result;
         }
-        public string UnicodeToCharacter(string text)
+        public string UnicodeToCharacter( string text )
         {
-            text.Replace(" ", "");
-            byte[] arr = HexStringToByteArray(text);
+            text.Replace( " ", "" );
+            byte[] arr = HexStringToByteArray( text );
 
             System.Text.UnicodeEncoding converter = new System.Text.UnicodeEncoding();
 
-            string str = converter.GetString(arr);
+            string str = converter.GetString( arr );
 
             return str;
 
@@ -253,16 +253,16 @@ namespace IdentityCard
             get
             {
                 string path = Application.StartupPath + "\\photo\\";
-                if (!Directory.Exists(path))
+                if ( !Directory.Exists( path ) )
                 {
-                    Directory.CreateDirectory(path);
+                    Directory.CreateDirectory( path );
                 }
                 return path;
 
             }
         }
 
-        private void btnEnd_Click(object sender, EventArgs e)
+        private void btnEnd_Click( object sender, EventArgs e )
         {
 
         }
@@ -274,9 +274,9 @@ namespace IdentityCard
 
         private void btnExit_Click( object sender, EventArgs e )
         {
-            if (tcpipServer != null)
+            if ( tcpipServer != null )
             {
-                if (ns != null)
+                if ( ns != null )
                 {
                     ns.Close();
                     client.Close();
@@ -291,9 +291,9 @@ namespace IdentityCard
 
         private void Form1_FormClosed( object sender, FormClosedEventArgs e )
         {
-            if( tcpipServer != null )
+            if ( tcpipServer != null )
             {
-                if( ns != null )
+                if ( ns != null )
                 {
                     ns.Close();
                     client.Close();
@@ -375,7 +375,7 @@ namespace IdentityCard
         public void Insert( string identity )
         {
             List<SqlParameter> list = new List<SqlParameter>();
-            list.Add(new SqlParameter("@identity", identity ) );
+            list.Add( new SqlParameter( "@identity", identity ) );
 
             //根据临时工打卡时间获取这个时间内和临时工有关的服务
             DataTable orderDT = SqlDbHelper.ExecuteDataTable( "SELECT s.F_OrderId,s.F_MeetingName,s.F_StartTime,s.F_EndTime,t.F_CategoryId FROM F_Base_TempWorkOrderUserDetail t INNER JOIN LR_Base_TempUser u ON t.F_UserId=u.F_UserId INNER JOIN F_Base_TempWorkOrder s ON t.F_TempWorkOrderId=s.F_OrderId  WHERE u.F_Identity = @identity AND GETDATE() BETWEEN DATEADD( mi, -CONVERT( int, ( SELECT F_ItemValue FROM LR_Base_DataItemDetail WHERE F_ItemDetailId = '81d54b07-2acf-4efc-b2d3-079e823e3c35' ) ), s.F_StartTime) AND s.F_EndTime ORDER BY s.F_StartTime", list.ToArray() );
@@ -383,26 +383,26 @@ namespace IdentityCard
             int checkBlack = SqlDbHelper.ExecuteScalar( "SELECT COUNT(*) AS num FROM LR_Base_TempUser WHERE F_Identity=@identity AND F_EnabledMark=0", list.ToArray() );
 
             //判断是否是黑名单用户
-            if( checkBlack > 0 )
+            if ( checkBlack > 0 )
             {
                 label13.ForeColor = Color.Red;
                 label13.Text = "无效用户！";
             }
             else
             {
-                if (orderDT != null && orderDT.Rows.Count > 0)
+                if ( orderDT != null && orderDT.Rows.Count > 0 )
                 {
                     //打卡时间
                     DateTime time = DateTime.Now;
 
-                    list.Add(new SqlParameter("@orderID", orderDT.Rows[0]["F_OrderId"].ToString()));
+                    list.Add( new SqlParameter( "@orderID", orderDT.Rows[ 0 ][ "F_OrderId" ].ToString() ) );
 
                     //获取临时工当天打卡的两个时间用以判断是 上班还是下班
                     DataTable dt = SqlDbHelper.ExecuteDataTable(
                         "SELECT F_First,F_Second FROM LR_Base_CardRecord WHERE F_Identity=@identity AND F_OrderId=@orderID AND F_RecordDate=CONVERT(CHAR(10), GETDATE(), 120)",
-                        list.ToArray());
+                        list.ToArray() );
 
-                    if( dt != null && dt.Rows.Count > 0 )
+                    if ( dt != null && dt.Rows.Count > 0 )
                     {
                         List<SqlParameter> list2 = new List<SqlParameter>();
                         list2.Add( new SqlParameter( "@orderID", orderDT.Rows[ 0 ][ "F_OrderId" ].ToString() ) );
@@ -412,55 +412,69 @@ namespace IdentityCard
                             "SELECT f_price FROM F_Base_TempWorkOrderCategoryDetail WHERE F_TempWorkOrderId=@orderID AND F_CategoryName=@categoryID",
                             list2.ToArray() );
 
-                        if( dt.Rows[ 0 ][ "F_First" ] != null && !string.IsNullOrEmpty( dt.Rows[ 0 ][ "F_First" ].ToString() ) )
+                        if ( dt.Rows[ 0 ][ "F_First" ] == null || string.IsNullOrEmpty( dt.Rows[ 0 ][ "F_First" ].ToString() ) )
                         {
                             //应发工资
                             list.Add( new SqlParameter( "@f_shouldDaysalary", price ) );
 
-                            if( DateTime.Compare( time, Convert.ToDateTime( orderDT.Rows[ 0 ][ "F_StartTime" ].ToString() ) ) >
+                            if ( DateTime.Compare( time, Convert.ToDateTime( orderDT.Rows[ 0 ][ "F_StartTime" ].ToString() ) ) >
                                 0 )
                             {
                                 //获取迟到需扣的金额
-                                int latePrice = SqlDbHelper.ExecuteScalar(
-                                    "SELECT F_ItemValue FROM LR_Base_DataItemDetail WHERE F_ItemDetailId='d96eb355-7af5-4a7e-b9da-6e6f3ca75783'" );
-                                list.Add( new SqlParameter( "@f_lateState", 1 ) ); //迟到
-                                list.Add( new SqlParameter( "@f_realDaySalary", price - latePrice ) ); //实发日工资
+                                int latePrice = SqlDbHelper.ExecuteScalar( "SELECT F_ItemValue FROM LR_Base_DataItemDetail WHERE F_ItemDetailId='d96eb355-7af5-4a7e-b9da-6e6f3ca75783'" );
+                                list.Add( new SqlParameter( "@f_lateState", 1 ) );                  //迟到
+                                list.Add( new SqlParameter( "@f_realDaySalary", -latePrice ) );     //实发日工资
                             }
                             else
                             {
-                                list.Add( new SqlParameter( "@f_lateState", 0 ) ); //正常上班
-                                list.Add( new SqlParameter( "@f_realDaySalary", price ) ); //实发日工资
+                                list.Add( new SqlParameter( "@f_lateState", 0 ) );      //正常上班
+                                list.Add( new SqlParameter( "@f_realDaySalary", 0 ) );  //实发日工资
                             }
 
                             list.Add( new SqlParameter( "@time", time ) );
+
                             SqlDbHelper.ExecuteNonQuery(
                                 "UPDATE LR_Base_CardRecord SET F_First=@time,f_lateState=@f_lateState,f_realDaySalary=@f_realDaySalary,f_shouldDaysalary=@f_shouldDaysalary WHERE F_Identity=@identity AND F_OrderId=@orderID AND F_RecordDate=CONVERT(CHAR(10), GETDATE(), 120)",
                                 list.ToArray() );
                         }
-                        else if( dt.Rows[ 0 ][ "F_Second" ] != null &&
-                                 !string.IsNullOrEmpty( dt.Rows[ 0 ][ "F_Second" ].ToString() ) )
+                        else if ( dt.Rows[ 0 ][ "F_Second" ] == null || string.IsNullOrEmpty( dt.Rows[ 0 ][ "F_Second" ].ToString() ) )
                         {
-                            if( DateTime.Compare( time, Convert.ToDateTime( orderDT.Rows[ 0 ][ "F_EndTime" ].ToString() ) ) < 0 )
+                            if ( DateTime.Compare( time, Convert.ToDateTime( orderDT.Rows[ 0 ][ "F_EndTime" ].ToString() ) ) < 0 )
                             {
                                 //获取早退需扣的金额
-                                int leaveEarlyPrice = SqlDbHelper.ExecuteScalar(
-                                    "SELECT F_ItemValue FROM LR_Base_DataItemDetail WHERE F_ItemDetailId='131db78a-43b3-47c4-b89b-89ef9280fbd0'" );
-                                list.Add( new SqlParameter( "@f_realDaySalary", -leaveEarlyPrice ) );
-                                list.Add( new SqlParameter( "@f_LeaveEarly", 1 ) ); //早退
+                                int leaveEarlyPrice = SqlDbHelper.ExecuteScalar( "SELECT F_ItemValue FROM LR_Base_DataItemDetail WHERE F_ItemDetailId='131db78a-43b3-47c4-b89b-89ef9280fbd0'" );
+
+                                TimeSpan ts = Convert.ToDateTime( orderDT.Rows[ 0 ][ "F_EndTime" ].ToString() ) - Convert.ToDateTime( orderDT.Rows[ 0 ][ "F_StartTime" ].ToString() );
+                                price       = ( price * ts.Hours ) - leaveEarlyPrice;
+                                list.Add( new SqlParameter( "@f_realDaySalary", price ) );
+                                list.Add( new SqlParameter( "@f_LeaveEarly", 1 ) );          //早退
                             }
                             else
                             {
-                                list.Add( new SqlParameter( "@f_LeaveEarly", 0 ) ); //正常下班
-                                list.Add( new SqlParameter( "@f_realDaySalary", 0 ) );
+                                list.Add( new SqlParameter( "@f_LeaveEarly", 0 ) );          //正常下班
+
+                                TimeSpan ts1 = new TimeSpan( time.Ticks );
+                                TimeSpan ts2 = new TimeSpan( Convert.ToDateTime( orderDT.Rows[ 0 ][ "F_StartTime" ].ToString() ).Ticks );
+                                TimeSpan ts  = ts1.Subtract( ts2 ).Duration();
+                                price        = price * ts.Hours;
+
+                                if ( ts.Minutes >= 30 )
+                                {
+                                    //加班如果超过半小时就发半小时工资
+                                    price = price + (price / 2);
+                                }
+
+                                list.Add( new SqlParameter( "@f_realDaySalary", price ) );   //实发日工资
                             }
 
                             list.Add( new SqlParameter( "@time", time ) );
+
                             SqlDbHelper.ExecuteNonQuery(
                                 "UPDATE LR_Base_CardRecord SET F_Second=@time,f_LeaveEarly=@f_LeaveEarly,f_realDaySalary=f_realDaySalary + @f_realDaySalary WHERE F_Identity=@identity AND F_OrderId=@orderID AND F_RecordDate=CONVERT(CHAR(10), GETDATE(), 120)",
                                 list.ToArray() );
                         }
 
-                        label13.Text = orderDT.Rows[ 0 ][ "F_MeetingName" ].ToString();
+                        label13.Text      = orderDT.Rows[ 0 ][ "F_MeetingName" ].ToString();
                         label13.ForeColor = Color.Green;
                     }
                     else
@@ -472,17 +486,17 @@ namespace IdentityCard
                 else
                 {
                     label13.ForeColor = Color.Red;
-                    label13.Text = "未检测到所参与的服务！";
+                    label13.Text      = "未检测到所参与的服务！";
                 }
             }
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void timer1_Tick( object sender, EventArgs e )
         {
-            label10.Text = DateTime.Now.AddSeconds(0).ToString("yyyy-MM-dd HH:mm:ss");
+            label10.Text = DateTime.Now.AddSeconds( 0 ).ToString( "yyyy-MM-dd HH:mm:ss" );
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void Form1_Load( object sender, EventArgs e )
         {
             timer1.Start();
         }
