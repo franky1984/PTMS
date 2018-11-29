@@ -488,7 +488,7 @@ namespace IdentityCard
 
                             //判断当前订单是否包含吃饭这个福利
                             if ( checkMealTime == 1 )
-                            {
+                            { 
                                 DataTable mealTimeDT = SqlDbHelper.ExecuteDataTable( "SELECT F_ItemDetailId,F_ItemValue FROM LR_Base_DataItemDetail WHERE F_ItemId='2db79aaf-4c93-4c17-b587-e3709e4a398e' ORDER BY F_SortCode" );
                                 //获取吃饭分钟数
                                 TimeSpan temp = TimeSpan.FromMinutes( Convert.ToInt32( mealTimeDT.Rows[ 2 ][ "F_ItemValue" ].ToString() ) );
