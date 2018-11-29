@@ -463,20 +463,20 @@ namespace IdentityCard
                             }
 
                             #region 迟到扣钱（暂时屏蔽）
+
+                            //获取迟到需扣的金额
+                            //int latePrice = SqlDbHelper.ExecuteScalar( "SELECT ISNULL(F_ItemValue,0) AS f_itemValue FROM LR_Base_DataItemDetail WHERE F_ItemDetailId='d96eb355-7af5-4a7e-b9da-6e6f3ca75783'" );
+
                             //迟到扣钱
 //                            if ( lateState == 1 )
 //                            {
-//                                //获取迟到需扣的金额
-//                                int latePrice = SqlDbHelper.ExecuteScalar( "SELECT ISNULL(F_ItemValue,0) AS f_itemValue FROM LR_Base_DataItemDetail WHERE F_ItemDetailId='d96eb355-7af5-4a7e-b9da-6e6f3ca75783'" );
-//                                price         = price - latePrice;
+//                                price = price - latePrice;
 //                            }
 
                             //早退扣钱
-//                            if (leaveEarly == 1)
+//                            if ( leaveEarly == 1 )
 //                            {
-//                                //获取早退需扣的金额
-//                                int latePrice = SqlDbHelper.ExecuteScalar( "SELECT ISNULL(F_ItemValue,0) AS f_itemValue FROM LR_Base_DataItemDetail WHERE F_ItemDetailId='d96eb355-7af5-4a7e-b9da-6e6f3ca75783'" );
-//                                price         = price - latePrice;
+//                                price = price - latePrice;
 //                            }
                             #endregion
 
