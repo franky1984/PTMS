@@ -386,7 +386,7 @@ namespace IdentityCard
             if ( checkBlack > 0 )
             {
                 label13.ForeColor = Color.Red;
-                label13.Text = "无效用户！";
+                label13.Text      = "无效用户！";
             }
             else
             {
@@ -440,25 +440,28 @@ namespace IdentityCard
 
                             if ( DateTime.Compare( time, Convert.ToDateTime( orderDT.Rows[ 0 ][ "F_EndTime" ].ToString() ) ) < 0 )
                             {
-                                list.Add( new SqlParameter( "@f_LeaveEarly", 1 ) );          //早退
+                                //早退
+                                list.Add( new SqlParameter( "@f_LeaveEarly", 1 ) );         
                                 leaveEarly = 1;
                             }
                             else
                             {
-                                list.Add( new SqlParameter( "@f_LeaveEarly", 0 ) );          //正常下班
+                                //正常下班
+                                list.Add( new SqlParameter( "@f_LeaveEarly", 0 ) );          
                             }
 
                             TimeSpan ts1 = new TimeSpan( time.Ticks );
                             TimeSpan ts2 = new TimeSpan( Convert.ToDateTime( orderDT.Rows[ 0 ][ "F_StartTime" ].ToString() ).Ticks );
                             TimeSpan ts3 = ts1.Subtract( ts2 ).Duration();
+
                             //计算工资（工种小时单价 * 总工作时间 ）
                             int price = categoryPrice * ts3.Hours;
-                            yfPrice = price;
+                            yfPrice   = price;
 
                             if ( ts3.Minutes >= 30 )
                             {
                                 //加班如果超过半小时就发半小时工资
-                                price = price + ( categoryPrice / 2 );
+                                price   = price + ( categoryPrice / 2 );
                                 yfPrice = yfPrice + ( categoryPrice / 2 );
                             }
 
@@ -499,7 +502,8 @@ namespace IdentityCard
                                     {
                                         t = t + ( categoryPrice / 2 );
                                     }
-                                    price = price - t;
+
+                                    price   = price - t;
                                     yfPrice = yfPrice - t;
                                 }
 
@@ -512,7 +516,8 @@ namespace IdentityCard
                                     {
                                         t = t + ( categoryPrice / 2 );
                                     }
-                                    price = price - t;
+
+                                    price   = price - t;
                                     yfPrice = yfPrice - t;
                                 }
                             }
@@ -528,19 +533,19 @@ namespace IdentityCard
                                 list.ToArray() );
                         }
 
-                        label13.Text = orderDT.Rows[ 0 ][ "F_MeetingName" ].ToString();
+                        label13.Text      = orderDT.Rows[ 0 ][ "F_MeetingName" ].ToString();
                         label13.ForeColor = Color.Green;
                     }
                     else
                     {
                         label13.ForeColor = Color.Red;
-                        label13.Text = "未检测到所参与的服务！";
+                        label13.Text      = "未检测到所参与的服务！";
                     }
                 }
                 else
                 {
                     label13.ForeColor = Color.Red;
-                    label13.Text = "未检测到所参与的服务！";
+                    label13.Text      = "未检测到所参与的服务！";
                 }
             }
         }
