@@ -426,7 +426,10 @@ namespace IdentityCard
                         }
                         else if ( dt.Rows[ 0 ][ "F_Second" ] == null || string.IsNullOrEmpty( dt.Rows[ 0 ][ "F_Second" ].ToString() ) )
                         {
-                            int lateState = SqlDbHelper.ExecuteScalar( "SELECT f_lateState FROM LR_Base_CardRecord WHERE F_Identity='" + identity + "' AND F_OrderId='" + orderDT.Rows[ 0 ][ "F_OrderId" ].ToString() + "' AND F_RecordDate=CONVERT(CHAR(10), GETDATE(), 120)" );
+                            //获取迟到状态 
+                            int lateState = 0;
+                            //lateState   = SqlDbHelper.ExecuteScalar( "SELECT f_lateState FROM LR_Base_CardRecord WHERE F_Identity='" + identity + "' AND F_OrderId='" + orderDT.Rows[ 0 ][ "F_OrderId" ].ToString() + "' AND F_RecordDate=CONVERT(CHAR(10), GETDATE(), 120)" );
+                            //早退状态
                             int leaveEarly = 0;
 
                             //应发工资 
@@ -465,26 +468,28 @@ namespace IdentityCard
                             //int latePrice = SqlDbHelper.ExecuteScalar( "SELECT ISNULL(F_ItemValue,0) AS f_itemValue FROM LR_Base_DataItemDetail WHERE F_ItemDetailId='d96eb355-7af5-4a7e-b9da-6e6f3ca75783'" );
 
                             //迟到扣钱
-//                            if ( lateState == 1 )
-//                            {
-//                                price = price - latePrice;
-//                            }
+                            //                            if ( lateState == 1 )
+                            //                            {
+                            //                                price = price - latePrice;
+                            //                            }
 
                             //早退扣钱
-//                            if ( leaveEarly == 1 )
-//                            {
-//                                price = price - latePrice;
-//                            }
+                            //                            if ( leaveEarly == 1 )
+                            //                            {
+                            //                                price = price - latePrice;
+                            //                            }
                             #endregion
 
+                            List<SqlParameter> tempList = new List<SqlParameter>();
+                            tempList.Add( new SqlParameter( "@orderID", orderDT.Rows[ 0 ][ "F_OrderId" ].ToString() ) );
                             //获取吃饭福利状态
-                            int checkMealTime = SqlDbHelper.ExecuteScalar( "SELECT ISNULL(F_CheckMealtime,0) AS f_checkMealtime FROM F_Base_TempWorkOrder WHERE f_orderid='" + orderDT.Rows[ 0 ][ "F_OrderId" ].ToString() + "'" );
+                            int checkMealTime = SqlDbHelper.ExecuteScalar( "SELECT ISNULL(F_CheckMealtime,0) AS f_checkMealtime FROM F_Base_TempWorkOrder WHERE f_orderid=@orderID", tempList.ToArray() );
 
                             //判断当前订单是否包含吃饭这个福利
                             if ( checkMealTime == 1 )
                             { 
                                 DataTable mealTimeDT = SqlDbHelper.ExecuteDataTable( "SELECT F_ItemDetailId,F_ItemValue FROM LR_Base_DataItemDetail WHERE F_ItemId='2db79aaf-4c93-4c17-b587-e3709e4a398e' ORDER BY F_SortCode" );
-                                //获取吃饭分钟数
+                                //获取吃饭分钟数（总）
                                 TimeSpan temp = TimeSpan.FromMinutes( Convert.ToInt32( mealTimeDT.Rows[ 2 ][ "F_ItemValue" ].ToString() ) );
 
                                 //午饭
