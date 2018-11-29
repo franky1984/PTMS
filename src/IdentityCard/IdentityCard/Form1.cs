@@ -378,7 +378,7 @@ namespace IdentityCard
             list.Add( new SqlParameter( "@identity", identity ) );
 
             //根据临时工打卡时间获取这个时间内和临时工有关的服务
-            DataTable orderDT = SqlDbHelper.ExecuteDataTable( "SELECT s.F_OrderId,s.F_MeetingName,s.F_StartTime,s.F_EndTime,t.F_CategoryId,t.f_userid FROM F_Base_TempWorkOrderUserDetail t INNER JOIN LR_Base_TempUser u ON t.F_UserId=u.F_UserId INNER JOIN F_Base_TempWorkOrder s ON t.F_TempWorkOrderId=s.F_OrderId  WHERE u.F_Identity = @identity AND GETDATE() BETWEEN DATEADD( mi, -CONVERT( int, ( SELECT F_ItemValue FROM LR_Base_DataItemDetail WHERE F_ItemDetailId = '81d54b07-2acf-4efc-b2d3-079e823e3c35' ) ), s.F_StartTime) AND s.F_EndTime ORDER BY s.F_StartTime", list.ToArray() );
+            DataTable orderDT = SqlDbHelper.ExecuteDataTable( "SELECT s.F_OrderId,s.F_MeetingName,s.F_StartTime,s.F_EndTime,t.F_CategoryId,t.f_userid,ISNULL(type.f_price,0) AS f_price FROM F_Base_TempWorkOrderUserDetail t INNER JOIN LR_Base_TempUser u ON t.F_UserId=u.F_UserId INNER JOIN F_Base_TempWorkOrderCategoryDetail type ON t.F_TempWorkOrderId=type.F_TempWorkOrderId AND type.F_CategoryName=t.F_CategoryId INNER JOIN F_Base_TempWorkOrder s ON t.F_TempWorkOrderId=s.F_OrderId  WHERE u.F_Identity = @identity AND GETDATE() BETWEEN DATEADD( mi, -CONVERT( int, ( SELECT F_ItemValue FROM LR_Base_DataItemDetail WHERE F_ItemDetailId = '81d54b07-2acf-4efc-b2d3-079e823e3c35' ) ), s.F_StartTime) AND s.F_EndTime ORDER BY s.F_StartTime", list.ToArray() );
 
             int checkBlack = SqlDbHelper.ExecuteScalar( "SELECT COUNT(*) AS num FROM LR_Base_TempUser WHERE F_Identity=@identity AND F_EnabledMark=0", list.ToArray() );
 
@@ -404,13 +404,7 @@ namespace IdentityCard
 
                     if ( dt != null && dt.Rows.Count > 0 )
                     {
-                        List<SqlParameter> list2 = new List<SqlParameter>();
-                        list2.Add( new SqlParameter( "@orderID", orderDT.Rows[ 0 ][ "F_OrderId" ].ToString() ) );
-                        list2.Add( new SqlParameter( "@categoryID", orderDT.Rows[ 0 ][ "F_CategoryId" ].ToString() ) );
-                        list2.Add( new SqlParameter( "@userID", orderDT.Rows[ 0 ][ "f_userid" ].ToString() ) );
-
-                        //获取当前订单下小时工工种的小时费用
-                        int categoryPrice = SqlDbHelper.ExecuteScalar( "SELECT ISNULL(f_price,0) AS f_price FROM F_Base_TempWorkOrderCategoryDetail t INNER JOIN F_Base_TempWorkOrderUserDetail u ON t.F_CategoryName=u.F_CategoryId WHERE u.f_userid=@userID AND t.F_TempWorkOrderId=@orderID AND t.F_CategoryName=@categoryID", list2.ToArray() );
+                        int categoryPrice = Convert.ToInt32(orderDT.Rows[0][ "f_price" ].ToString());
 
                         if ( dt.Rows[ 0 ][ "F_First" ] == null || string.IsNullOrEmpty( dt.Rows[ 0 ][ "F_First" ].ToString() ) )
                         {
