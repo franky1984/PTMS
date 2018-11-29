@@ -2231,6 +2231,7 @@
     <Content Include="Areas\LR_CodeGeneratorModule\Views\TemplatePC\AppCustmerCodeIndex.cshtml" />
     <Content Include="Areas\LR_CodeDemo\Views\tempUser\blackCause.cshtml" />
     <Content Include="Areas\LR_CodeDemo\Views\tempUser\WorkSubstituteForm.cshtml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\learunadms6.1.pubxml" />
     <Content Include="Views\LR_Content\style\lr-layer.css" />
     <Content Include="Views\UserCenter\ContactForm.css" />
