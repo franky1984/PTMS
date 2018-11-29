@@ -427,7 +427,7 @@ namespace IdentityCard
                             list.Add( new SqlParameter( "@time", time ) );
 
                             SqlDbHelper.ExecuteNonQuery(
-                                "UPDATE LR_Base_CardRecord SET F_First=@time,f_lateState=@f_lateState,f_realDaySalary=@f_realDaySalary,f_shouldDaysalary=@f_shouldDaysalary WHERE F_Identity=@identity AND F_OrderId=@orderID AND F_RecordDate=CONVERT(CHAR(10), GETDATE(), 120)",
+                                "UPDATE LR_Base_CardRecord SET F_First=@time,f_lateState=@f_lateState,f_realDaySalary=@f_realDaySalary WHERE F_Identity=@identity AND F_OrderId=@orderID AND F_RecordDate=CONVERT(CHAR(10), GETDATE(), 120)",
                                 list.ToArray() );
                         }
                         else if ( dt.Rows[ 0 ][ "F_Second" ] == null || string.IsNullOrEmpty( dt.Rows[ 0 ][ "F_Second" ].ToString() ) )
@@ -522,7 +522,7 @@ namespace IdentityCard
                             list.Add( new SqlParameter( "@time", time ) );
 
                             SqlDbHelper.ExecuteNonQuery(
-                                "UPDATE LR_Base_CardRecord SET F_Second=@time,f_LeaveEarly=@f_LeaveEarly,f_realDaySalary=f_realDaySalary + @f_realDaySalary WHERE F_Identity=@identity AND F_OrderId=@orderID AND F_RecordDate=CONVERT(CHAR(10), GETDATE(), 120)",
+                                "UPDATE LR_Base_CardRecord SET F_Second=@time,f_LeaveEarly=@f_LeaveEarly,f_realDaySalary=@f_realDaySalary,f_shouldDaysalary=@f_shouldDaysalary WHERE F_Identity=@identity AND F_OrderId=@orderID AND F_RecordDate=CONVERT(CHAR(10), GETDATE(), 120)",
                                 list.ToArray() );
                         }
 

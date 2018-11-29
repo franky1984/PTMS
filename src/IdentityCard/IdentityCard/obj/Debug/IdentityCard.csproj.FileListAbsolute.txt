@@ -18,4 +18,3 @@ E:\Project\酒店临时工管理系统\git\src\IdentityCard\IdentityCard\obj\Deb
 E:\Project\酒店临时工管理系统\git\src\IdentityCard\IdentityCard\obj\Debug\IdentityCard.csproj.CopyComplete
 E:\Project\酒店临时工管理系统\git\src\IdentityCard\IdentityCard\obj\Debug\IdentityCard.exe
 E:\Project\酒店临时工管理系统\git\src\IdentityCard\IdentityCard\obj\Debug\IdentityCard.pdb
-E:\Project\酒店临时工管理系统\git\src\IdentityCard\IdentityCard\obj\Debug\IdentityCard.csprojAssemblyReference.cache
