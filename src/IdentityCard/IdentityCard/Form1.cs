@@ -433,21 +433,15 @@ namespace IdentityCard
                         else if ( dt.Rows[ 0 ][ "F_Second" ] == null || string.IsNullOrEmpty( dt.Rows[ 0 ][ "F_Second" ].ToString() ) )
                         {
                             int lateState = SqlDbHelper.ExecuteScalar( "SELECT f_lateState FROM LR_Base_CardRecord WHERE F_Identity='" + identity + "' AND F_OrderId='" + orderDT.Rows[ 0 ][ "F_OrderId" ].ToString() + "' AND F_RecordDate=CONVERT(CHAR(10), GETDATE(), 120)" );
+                            int leaveEarly = 0;
+
                             //应发工资 
                             int yfPrice = 0;
 
                             if ( DateTime.Compare( time, Convert.ToDateTime( orderDT.Rows[ 0 ][ "F_EndTime" ].ToString() ) ) < 0 )
                             {
-                                #region 早退扣钱（暂时屏蔽）
-                                //获取早退需扣的金额
-                                //                                int leaveEarlyPrice = SqlDbHelper.ExecuteScalar( "SELECT F_ItemValue FROM LR_Base_DataItemDetail WHERE F_ItemDetailId='131db78a-43b3-47c4-b89b-89ef9280fbd0'" );
-                                //
-                                //                                TimeSpan ts = Convert.ToDateTime( orderDT.Rows[ 0 ][ "F_EndTime" ].ToString() ).AddMinutes( -mealtime ) - Convert.ToDateTime( orderDT.Rows[ 0 ][ "F_StartTime" ].ToString() );
-                                //                                price       = ( price * ts.Hours ) - leaveEarlyPrice;
-                                //                                list.Add( new SqlParameter( "@f_realDaySalary", price ) );
-                                #endregion
-
                                 list.Add( new SqlParameter( "@f_LeaveEarly", 1 ) );          //早退
+                                leaveEarly = 1;
                             }
                             else
                             {
@@ -458,25 +452,33 @@ namespace IdentityCard
                             TimeSpan ts2 = new TimeSpan( Convert.ToDateTime( orderDT.Rows[ 0 ][ "F_StartTime" ].ToString() ).Ticks );
                             TimeSpan ts3 = ts1.Subtract( ts2 ).Duration();
                             //计算工资（工种小时单价 * 总工作时间 ）
-                            int price    = categoryPrice * ts3.Hours;
-                            yfPrice      = price;
+                            int price = categoryPrice * ts3.Hours;
+                            yfPrice = price;
 
                             if ( ts3.Minutes >= 30 )
                             {
                                 //加班如果超过半小时就发半小时工资
-                                price   = price + ( categoryPrice / 2 );
+                                price = price + ( categoryPrice / 2 );
                                 yfPrice = yfPrice + ( categoryPrice / 2 );
                             }
 
+                            #region 迟到扣钱（暂时屏蔽）
                             //迟到扣钱
-                            if ( lateState == 1 )
-                            {
-                                //获取迟到需扣的金额
-                                int latePrice = SqlDbHelper.ExecuteScalar( "SELECT ISNULL(F_ItemValue,0) AS f_itemValue FROM LR_Base_DataItemDetail WHERE F_ItemDetailId='d96eb355-7af5-4a7e-b9da-6e6f3ca75783'" );
+//                            if ( lateState == 1 )
+//                            {
+//                                //获取迟到需扣的金额
+//                                int latePrice = SqlDbHelper.ExecuteScalar( "SELECT ISNULL(F_ItemValue,0) AS f_itemValue FROM LR_Base_DataItemDetail WHERE F_ItemDetailId='d96eb355-7af5-4a7e-b9da-6e6f3ca75783'" );
+//                                price         = price - latePrice;
+//                            }
 
-                                //如果迟到
-                                price = price - latePrice;
-                            }
+                            //早退扣钱
+//                            if (leaveEarly == 1)
+//                            {
+//                                //获取早退需扣的金额
+//                                int latePrice = SqlDbHelper.ExecuteScalar( "SELECT ISNULL(F_ItemValue,0) AS f_itemValue FROM LR_Base_DataItemDetail WHERE F_ItemDetailId='d96eb355-7af5-4a7e-b9da-6e6f3ca75783'" );
+//                                price         = price - latePrice;
+//                            }
+                            #endregion
 
                             //获取吃饭福利状态
                             int checkMealTime = SqlDbHelper.ExecuteScalar( "SELECT ISNULL(F_CheckMealtime,0) AS f_checkMealtime FROM F_Base_TempWorkOrder WHERE f_orderid='" + orderDT.Rows[ 0 ][ "F_OrderId" ].ToString() + "'" );
@@ -486,7 +488,7 @@ namespace IdentityCard
                             {
                                 DataTable mealTimeDT = SqlDbHelper.ExecuteDataTable( "SELECT F_ItemDetailId,F_ItemValue FROM LR_Base_DataItemDetail WHERE F_ItemId='2db79aaf-4c93-4c17-b587-e3709e4a398e' ORDER BY F_SortCode" );
                                 //获取吃饭分钟数
-                                TimeSpan temp        = TimeSpan.FromMinutes( Convert.ToInt32( mealTimeDT.Rows[ 2 ][ "F_ItemValue" ].ToString() ) );
+                                TimeSpan temp = TimeSpan.FromMinutes( Convert.ToInt32( mealTimeDT.Rows[ 2 ][ "F_ItemValue" ].ToString() ) );
 
                                 //午饭
                                 if ( DateTime.Compare( time, Convert.ToDateTime( DateTime.Now.ToString( "yyyy-MM-dd" ) + " " + mealTimeDT.Rows[ 0 ][ "F_ItemValue" ].ToString() ) ) > 0 )
@@ -497,7 +499,7 @@ namespace IdentityCard
                                     {
                                         t = t + ( categoryPrice / 2 );
                                     }
-                                    price   = price - t;
+                                    price = price - t;
                                     yfPrice = yfPrice - t;
                                 }
 
@@ -510,7 +512,7 @@ namespace IdentityCard
                                     {
                                         t = t + ( categoryPrice / 2 );
                                     }
-                                    price   = price - t;
+                                    price = price - t;
                                     yfPrice = yfPrice - t;
                                 }
                             }
