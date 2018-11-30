@@ -61,96 +61,106 @@ namespace IdentityCard
 
                 try
                 {
-                    client = tcpipServer.AcceptTcpClient();
-                    ns = client.GetStream();
-                }
-                catch ( Exception e )
-                {
-
-                }
-
-                try
-                {
-                    if ( ns.CanRead )
+                    if ( !tcpipServer.Pending() )
+                    { }
+                    else
                     {
-                        lock ( ns )
+                        client = tcpipServer.AcceptTcpClient();
+                        ns     = client.GetStream();
+
+                        try
                         {
-                            //报文全部转换成16进制
-                            StringBuilder sb = new StringBuilder();
-                            do
+                            if ( ns.CanRead )
                             {
-                                byte[] temp = new byte[ 200 ];
-                                int num = ns.Read( temp, 0, temp.Length );
-
-                                for ( int i = 0; i < temp.Length; i++ )
+                                lock ( ns )
                                 {
-                                    sb.AppendFormat( "{0:x2}" + " ", temp[ i ] );
-                                }
+                                    //报文全部转换成16进制
+                                    StringBuilder sb = new StringBuilder();
+                                    do
+                                    {
+                                        byte[] temp = new byte[ 200 ];
+                                        int num = ns.Read( temp, 0, temp.Length );
 
-                                Thread.Sleep( 20 );
+                                        for ( int i = 0; i < temp.Length; i++ )
+                                        {
+                                            sb.AppendFormat( "{0:x2}" + " ", temp[ i ] );
+                                        }
 
-                            } while ( ns.DataAvailable );
+                                        Thread.Sleep( 20 );
 
-                            int a = sb.ToString().ToUpper().Length;
+                                    } while ( ns.DataAvailable );
 
-                            string[] str_all = sb.ToString().ToUpper().Replace( " ", "" ).Split( new string[] { "1000400" }, StringSplitOptions.RemoveEmptyEntries );
+                                    int a = sb.ToString().ToUpper().Length;
 
-                            string str_Name = str_all[ 1 ].Trim().Substring( 0, 60 );
-                            string str_Sex = str_all[ 1 ].Trim().Substring( 60, 4 );
-                            string str_Mz = str_all[ 1 ].Trim().Substring( 64, 8 );
-                            string str_Birth = str_all[ 1 ].Trim().Substring( 72, 32 );
-                            string str_Address = str_all[ 1 ].Trim().Substring( 104, 140 );
-                            string str_idc = str_all[ 1 ].Trim().Substring( 244, 72 );
+                                    string[] str_all = sb.ToString().ToUpper().Replace( " ", "" ).Split( new string[] { "1000400" }, StringSplitOptions.RemoveEmptyEntries );
 
-                            label2.Text = UnicodeToCharacter( str_Name );
-                            label3.Text = UnicodeToCharacter( str_Sex ) == "1" ? "男" : "女";
-                            label4.Text = lstMZ[ UnicodeToCharacter( str_Mz ) ];
-                            string birth = UnicodeToCharacter( str_Birth );
-                            label5.Text = birth.Substring( 0, 4 );
-                            label6.Text = birth.Substring( 4, 2 ).TrimStart( '0' );
-                            label7.Text = birth.Substring( 6, 2 ).TrimStart( '0' );
-                            label9.Text = UnicodeToCharacter( str_Address );
-                            label8.Text = UnicodeToCharacter( str_idc );
+                                    string str_Name = str_all[ 1 ].Trim().Substring( 0, 60 );
+                                    string str_Sex = str_all[ 1 ].Trim().Substring( 60, 4 );
+                                    string str_Mz = str_all[ 1 ].Trim().Substring( 64, 8 );
+                                    string str_Birth = str_all[ 1 ].Trim().Substring( 72, 32 );
+                                    string str_Address = str_all[ 1 ].Trim().Substring( 104, 140 );
+                                    string str_idc = str_all[ 1 ].Trim().Substring( 244, 72 );
+
+                                    label2.Text = UnicodeToCharacter( str_Name );
+                                    label3.Text = UnicodeToCharacter( str_Sex ) == "1" ? "男" : "女";
+                                    label4.Text = lstMZ[ UnicodeToCharacter( str_Mz ) ];
+                                    string birth = UnicodeToCharacter( str_Birth );
+                                    label5.Text = birth.Substring( 0, 4 );
+                                    label6.Text = birth.Substring( 4, 2 ).TrimStart( '0' );
+                                    label7.Text = birth.Substring( 6, 2 ).TrimStart( '0' );
+                                    label9.Text = UnicodeToCharacter( str_Address );
+                                    label8.Text = UnicodeToCharacter( str_idc );
 
 
-                            byte[] byBgrBuffer = new byte[ 38556 ];    //解码后图片BGR编码值
-                            byte[] byRgbBuffer = new byte[ 38808 ];    //解码后图片RGB编码值
-                            byte[] byBmpBuffer = new byte[ 38862 ];    //解码后图片RGB编码值
-                            unpack( HexStringToByteArray( str_all[ 1 ].Trim().Substring( 512, 2048 ) ), byBgrBuffer, 0 );
+                                    byte[] byBgrBuffer = new byte[ 38556 ];    //解码后图片BGR编码值
+                                    byte[] byRgbBuffer = new byte[ 38808 ];    //解码后图片RGB编码值
+                                    byte[] byBmpBuffer = new byte[ 38862 ];    //解码后图片RGB编码值
 
-                            //拼接BMP图片格式头，14字节
-                            byte[] byBmpHead = new byte[ 14 ] { 0x42, 0x4D, 0xCE, 0x97, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x36, 0x00, 0x00, 0x00 };
-                            Array.Copy( byBmpHead, 0, byBmpBuffer, 0, 14 );
+                                    try
+                                    {
+                                        unpack(HexStringToByteArray(str_all[1].Trim().Substring(512, 2048)),
+                                            byBgrBuffer, 0);
+                                    }
+                                    catch { }
 
-                            //拼接BMP图像信息，40字节
-                            byte[] byBmpInfo = new byte[ 40 ]{   0x28,0x00,0x00,0x00,//结构所占用40字节    
+                                    //拼接BMP图片格式头，14字节
+                                    byte[] byBmpHead = new byte[ 14 ] { 0x42, 0x4D, 0xCE, 0x97, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x36, 0x00, 0x00, 0x00 };
+                                    Array.Copy( byBmpHead, 0, byBmpBuffer, 0, 14 );
+
+                                    //拼接BMP图像信息，40字节
+                                    byte[] byBmpInfo = new byte[ 40 ]{   0x28,0x00,0x00,0x00,//结构所占用40字节    
                                 0x66,0x00,0x00,0x00,//位图的宽度102像素
                                 0x7E,0x00,0x00,0x00,//位图的高度126像素
                                 0x01,0x00,          //目标设备的级别必须为1
                                 0x18,0x00,          //每个像素所需的位数24
                                 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00//......其他信息省略为0
                             };
-                            Array.Copy( byBmpInfo, 0, byBmpBuffer, 14, 40 );
-                            //将解码后的BGR格式数据进行B、R互换
-                            int iResult = bgr2rgb( byBgrBuffer, byBgrBuffer.Length, byRgbBuffer, byRgbBuffer.Length, 102, 126 );
-                            Array.Copy( byRgbBuffer, 0, byBmpBuffer, 54, iResult );
-                            //写入文件
-                            int iBmpSize = 54 + iResult;
-                            tool_WriteOneFile( CardPath + label8.Text + ".bmp", byBmpBuffer, iBmpSize );
-                            pictureBox2.BackgroundImage = Image.FromFile( CardPath + label8.Text + ".bmp" );
+                                    Array.Copy( byBmpInfo, 0, byBmpBuffer, 14, 40 );
+                                    //将解码后的BGR格式数据进行B、R互换
+                                    int iResult = bgr2rgb( byBgrBuffer, byBgrBuffer.Length, byRgbBuffer, byRgbBuffer.Length, 102, 126 );
+                                    Array.Copy( byRgbBuffer, 0, byBmpBuffer, 54, iResult );
+                                    //写入文件
+                                    int iBmpSize = 54 + iResult;
 
-                            Insert( label8.Text );
+                                    if ( !File.Exists( CardPath + label8.Text + ".bmp" ) )
+                                    {
+                                        tool_WriteOneFile( CardPath + label8.Text + ".bmp", byBmpBuffer, iBmpSize );
+                                    }
+
+                                    pictureBox2.BackgroundImage = Image.FromFile( CardPath + label8.Text + ".bmp" );
+
+                                    Insert( label8.Text );
+                                }
+                            }
                         }
+                        catch ( Exception e )
+                        {}
+
+                        ns.Dispose();
                     }
                 }
                 catch ( Exception e )
-                {
-                    //                    client = tcpipServer.AcceptTcpClient();
-                    //                    ns = client.GetStream();
-                    continue;
-                }
-
-                ns.Dispose();
+                {}
             }
         }
 
@@ -380,6 +390,9 @@ namespace IdentityCard
             //根据临时工打卡时间获取这个时间内和临时工有关的服务
             DataTable orderDT = SqlDbHelper.ExecuteDataTable( "SELECT s.F_OrderId,s.F_MeetingName,s.F_StartTime,s.F_EndTime,t.F_CategoryId,t.f_userid,ISNULL(type.f_price,0) AS f_price FROM F_Base_TempWorkOrderUserDetail t INNER JOIN LR_Base_TempUser u ON t.F_UserId=u.F_UserId INNER JOIN F_Base_TempWorkOrderCategoryDetail type ON t.F_TempWorkOrderId=type.F_TempWorkOrderId AND type.F_CategoryName=t.F_CategoryId INNER JOIN F_Base_TempWorkOrder s ON t.F_TempWorkOrderId=s.F_OrderId  WHERE u.F_Identity = @identity AND GETDATE() BETWEEN DATEADD( mi, -CONVERT( int, ( SELECT F_ItemValue FROM LR_Base_DataItemDetail WHERE F_ItemDetailId = '81d54b07-2acf-4efc-b2d3-079e823e3c35' ) ), s.F_StartTime) AND s.F_EndTime ORDER BY s.F_StartTime", list.ToArray() );
 
+            list = new List<SqlParameter>();
+            list.Add( new SqlParameter( "@identity", identity ) );
+
             int checkBlack = SqlDbHelper.ExecuteScalar( "SELECT COUNT(*) AS num FROM LR_Base_TempUser WHERE F_Identity=@identity AND F_EnabledMark=0", list.ToArray() );
 
             //判断是否是黑名单用户
@@ -395,37 +408,43 @@ namespace IdentityCard
                     //打卡时间
                     DateTime time = DateTime.Now;
 
+                    list = new List<SqlParameter>();
+                    list.Add( new SqlParameter( "@identity", identity ) );
                     list.Add( new SqlParameter( "@orderID", orderDT.Rows[ 0 ][ "F_OrderId" ].ToString() ) );
 
                     //获取临时工当天打卡的两个时间用以判断是 上班还是下班
-                    DataTable dt = SqlDbHelper.ExecuteDataTable(
-                        "SELECT F_First,F_Second FROM LR_Base_CardRecord WHERE F_Identity=@identity AND F_OrderId=@orderID AND F_RecordDate=CONVERT(CHAR(10), GETDATE(), 120)",
-                        list.ToArray() );
+                    DataTable dt = SqlDbHelper.ExecuteDataTable( "SELECT F_First,F_Second FROM LR_Base_CardRecord WHERE F_Identity=@identity AND F_OrderId=@orderID AND F_RecordDate=CONVERT(CHAR(10), GETDATE(), 120)", list.ToArray() );
 
                     if ( dt != null && dt.Rows.Count > 0 )
                     {
-                        int categoryPrice = Convert.ToInt32(orderDT.Rows[0][ "f_price" ].ToString());
+                        //获取工种小时工资
+                        int categoryPrice = Convert.ToInt32( orderDT.Rows[ 0 ][ "f_price" ].ToString() );
 
                         if ( dt.Rows[ 0 ][ "F_First" ] == null || string.IsNullOrEmpty( dt.Rows[ 0 ][ "F_First" ].ToString() ) )
                         {
+                            list = new List<SqlParameter>();
+                            list.Add( new SqlParameter( "@identity", identity ) );
+                            list.Add( new SqlParameter( "@orderID", orderDT.Rows[ 0 ][ "F_OrderId" ].ToString() ) );
+                            int lateState = 0;
+
                             if ( DateTime.Compare( time, Convert.ToDateTime( orderDT.Rows[ 0 ][ "F_StartTime" ].ToString() ) ) > 0 )
                             {
-                                list.Add( new SqlParameter( "@f_lateState", 1 ) );      //迟到
-                            }
-                            else
-                            {
-                                list.Add( new SqlParameter( "@f_lateState", 0 ) );      //正常上班
+                                //迟到
+                                lateState = 1;
                             }
 
-                            list.Add( new SqlParameter( "@f_realDaySalary", 0 ) );      //实发日工资
                             list.Add( new SqlParameter( "@time", time ) );
 
                             SqlDbHelper.ExecuteNonQuery(
-                                "UPDATE LR_Base_CardRecord SET F_First=@time,f_lateState=@f_lateState,f_realDaySalary=@f_realDaySalary WHERE F_Identity=@identity AND F_OrderId=@orderID AND F_RecordDate=CONVERT(CHAR(10), GETDATE(), 120)",
+                                "UPDATE LR_Base_CardRecord SET F_First=@time,f_lateState=" + lateState.ToString() + " WHERE F_Identity=@identity AND F_OrderId=@orderID AND F_RecordDate=CONVERT(CHAR(10), GETDATE(), 120)",
                                 list.ToArray() );
                         }
                         else if ( dt.Rows[ 0 ][ "F_Second" ] == null || string.IsNullOrEmpty( dt.Rows[ 0 ][ "F_Second" ].ToString() ) )
                         {
+                            list = new List<SqlParameter>();
+                            list.Add( new SqlParameter( "@identity", identity ) );
+                            list.Add( new SqlParameter( "@orderID", orderDT.Rows[ 0 ][ "F_OrderId" ].ToString() ) );
+
                             //获取迟到状态 
                             int lateState = 0;
                             //lateState   = SqlDbHelper.ExecuteScalar( "SELECT f_lateState FROM LR_Base_CardRecord WHERE F_Identity='" + identity + "' AND F_OrderId='" + orderDT.Rows[ 0 ][ "F_OrderId" ].ToString() + "' AND F_RecordDate=CONVERT(CHAR(10), GETDATE(), 120)" );
@@ -438,13 +457,7 @@ namespace IdentityCard
                             if ( DateTime.Compare( time, Convert.ToDateTime( orderDT.Rows[ 0 ][ "F_EndTime" ].ToString() ) ) < 0 )
                             {
                                 //早退
-                                list.Add( new SqlParameter( "@f_LeaveEarly", 1 ) );         
                                 leaveEarly = 1;
-                            }
-                            else
-                            {
-                                //正常下班
-                                list.Add( new SqlParameter( "@f_LeaveEarly", 0 ) );          
                             }
 
                             TimeSpan ts1 = new TimeSpan( time.Ticks );
@@ -487,7 +500,7 @@ namespace IdentityCard
 
                             //判断当前订单是否包含吃饭这个福利
                             if ( checkMealTime == 1 )
-                            { 
+                            {
                                 DataTable mealTimeDT = SqlDbHelper.ExecuteDataTable( "SELECT F_ItemDetailId,F_ItemValue FROM LR_Base_DataItemDetail WHERE F_ItemId='2db79aaf-4c93-4c17-b587-e3709e4a398e' ORDER BY F_SortCode" );
                                 //获取吃饭分钟数（总）
                                 TimeSpan temp = TimeSpan.FromMinutes( Convert.ToInt32( mealTimeDT.Rows[ 2 ][ "F_ItemValue" ].ToString() ) );
@@ -528,17 +541,12 @@ namespace IdentityCard
                             list.Add( new SqlParameter( "@time", time ) );
 
                             SqlDbHelper.ExecuteNonQuery(
-                                "UPDATE LR_Base_CardRecord SET F_Second=@time,f_LeaveEarly=@f_LeaveEarly,f_realDaySalary=@f_realDaySalary,f_shouldDaysalary=@f_shouldDaysalary WHERE F_Identity=@identity AND F_OrderId=@orderID AND F_RecordDate=CONVERT(CHAR(10), GETDATE(), 120)",
+                                "UPDATE LR_Base_CardRecord SET F_Second=@time,f_LeaveEarly=" + leaveEarly.ToString() + ",f_realDaySalary=@f_realDaySalary,f_shouldDaysalary=@f_shouldDaysalary WHERE F_Identity=@identity AND F_OrderId=@orderID AND F_RecordDate=CONVERT(CHAR(10), GETDATE(), 120)",
                                 list.ToArray() );
                         }
 
                         label13.Text      = orderDT.Rows[ 0 ][ "F_MeetingName" ].ToString();
                         label13.ForeColor = Color.Green;
-                    }
-                    else
-                    {
-                        label13.ForeColor = Color.Red;
-                        label13.Text      = "未检测到所参与的服务！";
                     }
                 }
                 else
