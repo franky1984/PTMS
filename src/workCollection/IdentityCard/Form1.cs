@@ -491,7 +491,7 @@ namespace IdentityCard
                     list.Add( new SqlParameter( "@orderID", activity ) );
                     list.Add( new SqlParameter( "@userID", userInfo.Rows[ 0 ][ "f_userid" ].ToString() ) );
                     userID = userInfo.Rows[ 0 ][ "f_userid" ].ToString();
-                    num = Convert.ToInt32( SqlDbHelper.ExecuteScalar( "SELECT COUNT(*) AS num FROM F_Base_TempWorkOrderUserDetail WHERE F_TempWorkOrderId=@orderID AND f_userID=@userID", list.ToArray() ).ToString() );
+                    num    = Convert.ToInt32( SqlDbHelper.ExecuteScalar( "SELECT COUNT(*) AS num FROM F_Base_TempWorkOrderUserDetail WHERE F_TempWorkOrderId=@orderID AND f_userID=@userID", list.ToArray() ).ToString() );
                 }
                 else
                 {
@@ -512,7 +512,7 @@ namespace IdentityCard
 
                 if ( num > 0 )
                 {
-                    MessageBox.Show( "该人员在活动里已存在！" );
+                    MessageBox.Show( "人员在活动里已存在！" );
                 }
                 else
                 {
@@ -531,9 +531,9 @@ namespace IdentityCard
                     list.Add( new SqlParameter( "@orderID", activity ) );
 
                     //获取活动的开始和结束时间
-                    DataTable dt = SqlDbHelper.ExecuteDataTable( "SELECT * FROM F_Base_TempWorkOrder WHERE f_orderid=@orderID", list.ToArray() );
+                    DataTable dt       = SqlDbHelper.ExecuteDataTable( "SELECT * FROM F_Base_TempWorkOrder WHERE f_orderid=@orderID", list.ToArray() );
                     DateTime startTime = DateTime.Parse( dt.Rows[ 0 ][ "F_StartTime" ].ToString() );
-                    DateTime endTime = DateTime.Parse( dt.Rows[ 0 ][ "F_EndTime" ].ToString() );
+                    DateTime endTime   = DateTime.Parse( dt.Rows[ 0 ][ "F_EndTime" ].ToString() );
 
                     for ( DateTime t = startTime; t <= endTime; t = t.AddDays( 1 ) )
                     {
