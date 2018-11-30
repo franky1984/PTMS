@@ -44,11 +44,11 @@ namespace IdentityCard
         /// </summary>
         void init()
         {
-            string sql = "select F_OrderId+','+F_EmployerId AS id from F_Base_TempWorkOrder t INNER JOIN LR_Base_User u ON t.f_createuser=u.f_userid  INNER JOIN LR_WF_ProcessInstance c ON t.F_OrderId=c.f_id AND c.F_IsFinished=1 AND (SELECT COUNT(*) FROM LR_WF_TaskHistory WHERE F_ProcessId=c.f_id AND F_Result = 2)=0 WHERE u.F_CompanyId='" + ConfigurationManager.AppSettings[ "company" ] + "'";
+            string sql = "select F_OrderId+','+F_EmployerId AS id, F_MeetingName from F_Base_TempWorkOrder t INNER JOIN LR_Base_User u ON t.f_createuser=u.f_userid  INNER JOIN LR_WF_ProcessInstance c ON t.F_OrderId=c.f_id AND c.F_IsFinished=1 AND (SELECT COUNT(*) FROM LR_WF_TaskHistory WHERE F_ProcessId=c.f_id AND F_Result = 2)=0 WHERE u.F_CompanyId='" + ConfigurationManager.AppSettings[ "company" ] + "'";
 
-            DataTable activity   = SqlDbHelper.ExecuteDataTable("SELECT F_OrderId,F_MeetingName FROM F_Base_TempWorkOrder");
+            DataTable activity   = SqlDbHelper.ExecuteDataTable( sql );
             DataRow dr           = activity.NewRow();
-            dr["F_OrderId"]      = "0";
+            dr["id"]             = "0";
             dr["F_MeetingName"]  = "——请选择——";
             activity.Rows.InsertAt(dr, 0);
             ddlActivity.DataSource    = activity;
@@ -162,6 +162,7 @@ namespace IdentityCard
                             pictureBox2.BackgroundImage = Image.FromFile( CardPath + label8.Text + ".bmp" );
 
                             Insert(label8.Text);
+                            identity = label8.Text;
                         }
                     }
                 }
@@ -438,7 +439,7 @@ namespace IdentityCard
         /// <param name="e"></param>
         private void buttonX3_Click_1(object sender, EventArgs e)
         {
-            if ( checkValid )
+            if ( !checkValid )
             {
                 return;
             }
@@ -473,16 +474,31 @@ namespace IdentityCard
                 list.Add(new SqlParameter("@identity", identity));
 
                 //获取小时工信息
-                DataTable userInfo = SqlDbHelper.ExecuteDataTable("SELECT f_userid,F_RealName,F_Gender FROM MLR_Base_TempUser WHERE F_Identity=@identity", list.ToArray() );
+                DataTable userInfo = SqlDbHelper.ExecuteDataTable( "SELECT f_userid,F_RealName,F_Gender FROM LR_Base_TempUser WHERE F_Identity=@identity", list.ToArray() );
+                int num            = 0;
 
-                list = new List<SqlParameter>();
-                list.Add(new SqlParameter("@orderID", activity ) );
-                list.Add(new SqlParameter("@userID", userInfo.Rows[ 0 ]["f_userid"].ToString() ));
+                if ( userInfo != null && userInfo.Rows.Count > 0 )
+                {
+                    list = new List<SqlParameter>();
+                    list.Add( new SqlParameter( "@orderID", activity ) );
+                    list.Add( new SqlParameter( "@userID", userInfo.Rows[ 0 ][ "f_userid" ].ToString() ) );
 
-                int num = Convert.ToInt32( SqlDbHelper
-                    .ExecuteScalar(
-                        "SELECT COUNT(*) AS num FROM F_Base_TempWorkOrderUserDetail WHERE F_TempWorkOrderId=@orderID AND f_userID=@userID", list.ToArray() )
-                    .ToString() );
+                    num = Convert.ToInt32( SqlDbHelper.ExecuteScalar( "SELECT COUNT(*) AS num FROM F_Base_TempWorkOrderUserDetail WHERE F_TempWorkOrderId=@orderID AND f_userID=@userID", list.ToArray() ).ToString() );
+                }
+                else
+                {
+                    string userID = Guid.NewGuid().ToString();
+                    List<SqlParameter> usersParameter = new List<SqlParameter>();
+                    usersParameter.Add( new SqlParameter( "@F_RealName", label2.Text ) );
+                    usersParameter.Add( new SqlParameter( "@F_Gender", label3.Text == "男" ? "1" : "2" ) );
+                    usersParameter.Add( new SqlParameter( "@F_Mobile", txtPhone.Text ) );
+                    usersParameter.Add( new SqlParameter( "@f_userid", userID ) );
+                    SqlDbHelper.ExecuteNonQuery( "INSERT LR_Base_TempUser(f_userid,F_RealName,F_Gender,f_createtime,F_Mobile) VALUES(@f_userid,@F_RealName,@F_Gender,GETDATE(),@F_Mobile)", usersParameter.ToArray() );
+
+                    list = new List<SqlParameter>();
+                    list.Add( new SqlParameter( "@orderID", activity ) );
+                    list.Add( new SqlParameter( "@userID", userID ) );
+                }
 
                 if ( num > 0 )
                 {
@@ -511,12 +527,12 @@ namespace IdentityCard
                         list.Add(new SqlParameter("@F_RecordId", Guid.NewGuid().ToString()));
                         list.Add(new SqlParameter("@F_Identity", identity));
                         list.Add(new SqlParameter("@F_CreateTime", t));
-                        list.Add(new SqlParameter("@F_RealName", userInfo.Rows[0]["F_RealName"].ToString() ));
-                        list.Add(new SqlParameter("@F_Gender", userInfo.Rows[0]["F_Gender"].ToString() ));
+                        list.Add(new SqlParameter("@F_RealName", label2.Text ) );
+                        list.Add(new SqlParameter("@F_Gender", label3.Text == "男" ? "1" : "2" ) );
                         list.Add(new SqlParameter("@F_RecordDate", t.ToString("yyyy-MM-dd")));
 
                         //自动给临时工往打卡记录里初始化打卡记录
-                        SqlDbHelper.ExecuteNonQuery("INSERT LR_Base_CardRecord(F_RecordId,F_Identity,F_CreateTime,F_RealName,F_Gender,F_OrderId,F_RecordDate) VALUES (@F_RecordId,@F_Identity,@F_CreateTime,@F_RealName,@F_Gender,@orderID,@F_RecordDate)", list.ToArray() );
+                        int a = SqlDbHelper.ExecuteNonQuery("INSERT LR_Base_CardRecord(F_RecordId,F_Identity,F_CreateTime,F_RealName,F_Gender,F_OrderId,F_RecordDate) VALUES (@F_RecordId,@F_Identity,@F_CreateTime,@F_RealName,@F_Gender,@orderID,@F_RecordDate)", list.ToArray() );
                     }
                 }
 

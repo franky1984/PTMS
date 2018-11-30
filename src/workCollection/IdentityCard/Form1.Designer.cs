@@ -56,6 +56,8 @@
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.txtPhone = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -107,7 +109,7 @@
             // pictureBox2
             // 
             this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox2.Location = new System.Drawing.Point(370, 105);
+            this.pictureBox2.Location = new System.Drawing.Point(379, 38);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(102, 126);
             this.pictureBox2.TabIndex = 9;
@@ -245,16 +247,15 @@
             this.label13.ForeColor = System.Drawing.Color.White;
             this.label13.Location = new System.Drawing.Point(262, 107);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(67, 14);
+            this.label13.Size = new System.Drawing.Size(0, 14);
             this.label13.TabIndex = 9;
-            this.label13.Text = "无效用户";
             // 
             // buttonX3
             // 
             this.buttonX3.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.buttonX3.BackColor = System.Drawing.Color.Transparent;
             this.buttonX3.ColorTable = DevComponents.DotNetBar.eButtonColor.BlueOrb;
-            this.buttonX3.Location = new System.Drawing.Point(265, 540);
+            this.buttonX3.Location = new System.Drawing.Point(352, 540);
             this.buttonX3.Name = "buttonX3";
             this.buttonX3.Shape = new DevComponents.DotNetBar.RoundRectangleShapeDescriptor(12);
             this.buttonX3.Size = new System.Drawing.Size(90, 35);
@@ -334,11 +335,30 @@
             this.label19.AutoSize = true;
             this.label19.BackColor = System.Drawing.Color.Transparent;
             this.label19.ForeColor = System.Drawing.Color.Red;
-            this.label19.Location = new System.Drawing.Point(361, 563);
+            this.label19.Location = new System.Drawing.Point(448, 563);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(131, 12);
             this.label19.TabIndex = 20;
             this.label19.Text = "（注：*号代表必填项）";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.BackColor = System.Drawing.Color.Transparent;
+            this.label12.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label12.ForeColor = System.Drawing.Color.White;
+            this.label12.Location = new System.Drawing.Point(41, 550);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(82, 14);
+            this.label12.TabIndex = 21;
+            this.label12.Text = "联系方式：";
+            // 
+            // txtPhone
+            // 
+            this.txtPhone.Location = new System.Drawing.Point(119, 548);
+            this.txtPhone.Name = "txtPhone";
+            this.txtPhone.Size = new System.Drawing.Size(145, 21);
+            this.txtPhone.TabIndex = 22;
             // 
             // Form1
             // 
@@ -347,6 +367,8 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(760, 642);
+            this.Controls.Add(this.txtPhone);
+            this.Controls.Add(this.label12);
             this.Controls.Add(this.label19);
             this.Controls.Add(this.label17);
             this.Controls.Add(this.label16);
@@ -409,6 +431,8 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox txtPhone;
     }
 }
 
