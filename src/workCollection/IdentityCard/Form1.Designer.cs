@@ -254,7 +254,7 @@
             this.buttonX3.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.buttonX3.BackColor = System.Drawing.Color.Transparent;
             this.buttonX3.ColorTable = DevComponents.DotNetBar.eButtonColor.BlueOrb;
-            this.buttonX3.Location = new System.Drawing.Point(265, 542);
+            this.buttonX3.Location = new System.Drawing.Point(265, 540);
             this.buttonX3.Name = "buttonX3";
             this.buttonX3.Shape = new DevComponents.DotNetBar.RoundRectangleShapeDescriptor(12);
             this.buttonX3.Size = new System.Drawing.Size(90, 35);

@@ -390,6 +390,7 @@ namespace IdentityCard
             lstMZ.Add( "98", "外国人入籍" );
         }
 
+        bool checkValid = true;
         /// <summary>
         /// 
         /// </summary>
@@ -402,14 +403,16 @@ namespace IdentityCard
             int checkBlack   = SqlDbHelper.ExecuteScalar( "SELECT COUNT(*) AS num FROM LR_Base_TempUser WHERE F_Identity=@identity AND F_EnabledMark=0", list.ToArray() );
 
             //判断是否是黑名单用户
-            if ( checkBlack > 0 )
+            if (checkBlack > 0)
             {
                 label13.ForeColor = Color.Red;
                 label13.Text      = "无效用户！";
+                checkValid        = false;
             }
             else
             {
-
+                label13.Text = string.Empty;
+                checkValid   = true;
             }
         }
 
@@ -435,6 +438,11 @@ namespace IdentityCard
         /// <param name="e"></param>
         private void buttonX3_Click_1(object sender, EventArgs e)
         {
+            if ( checkValid )
+            {
+                return;
+            }
+
             string activity = ddlActivity.SelectedValue.ToString().Split( ',' )[ 0 ];
             string type     = string.Empty;
 
@@ -493,6 +501,7 @@ namespace IdentityCard
                     list = new List<SqlParameter>();
                     list.Add(new SqlParameter("@orderID", activity ) );
 
+                    //获取活动的开始和结束时间
                     DataTable dt       = SqlDbHelper.ExecuteDataTable( "SELECT * FROM F_Base_TempWorkOrder WHERE f_orderid=@orderID", list.ToArray() );
                     DateTime startTime = DateTime.Parse(dt.Rows[0]["F_StartTime"].ToString());
                     DateTime endTime   = DateTime.Parse(dt.Rows[0]["F_EndTime"].ToString());
@@ -530,13 +539,13 @@ namespace IdentityCard
             //根据选择的活动只获取这个活动下的工种
             DataTable type = SqlDbHelper.ExecuteDataTable( "SELECT DISTINCT t.F_CategoryId,t.F_CategoryName FROM LR_Base_Category t INNER JOIN F_Base_TempWorkOrderCategoryDetail c ON t.F_CategoryId=c.F_CategoryName WHERE c.F_TempWorkOrderId='" + ddlActivity.SelectedValue.ToString().Split( ',' )[ 0 ] + "'" );
 
-            DataRow dr = type.NewRow();
-            dr["F_CategoryId"] = "0";
+            DataRow dr           = type.NewRow();
+            dr["F_CategoryId"]   = "0";
             dr["F_CategoryName"] = "——请选择——";
             type.Rows.InsertAt(dr, 0);
-            ddlType.DataSource = type;
+            ddlType.DataSource    = type;
             ddlType.DisplayMember = "F_CategoryName";
-            ddlType.ValueMember = "F_CategoryId";
+            ddlType.ValueMember   = "F_CategoryId";
         }
     }
 }
