@@ -49,15 +49,12 @@
             this.label11 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.buttonX3 = new DevComponents.DotNetBar.ButtonX();
-            this.label12 = new System.Windows.Forms.Label();
-            this.ddlCompany = new System.Windows.Forms.ComboBox();
             this.label14 = new System.Windows.Forms.Label();
             this.ddlType = new System.Windows.Forms.ComboBox();
             this.ddlActivity = new System.Windows.Forms.ComboBox();
             this.label15 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
-            this.label18 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
@@ -257,7 +254,7 @@
             this.buttonX3.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.buttonX3.BackColor = System.Drawing.Color.Transparent;
             this.buttonX3.ColorTable = DevComponents.DotNetBar.eButtonColor.BlueOrb;
-            this.buttonX3.Location = new System.Drawing.Point(297, 534);
+            this.buttonX3.Location = new System.Drawing.Point(265, 542);
             this.buttonX3.Name = "buttonX3";
             this.buttonX3.Shape = new DevComponents.DotNetBar.RoundRectangleShapeDescriptor(12);
             this.buttonX3.Size = new System.Drawing.Size(90, 35);
@@ -265,34 +262,13 @@
             this.buttonX3.Text = "人员采集";
             this.buttonX3.Click += new System.EventHandler(this.buttonX3_Click_1);
             // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.BackColor = System.Drawing.Color.Transparent;
-            this.label12.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label12.ForeColor = System.Drawing.Color.White;
-            this.label12.Location = new System.Drawing.Point(310, 507);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(82, 14);
-            this.label12.TabIndex = 11;
-            this.label12.Text = "劳务公司：";
-            // 
-            // ddlCompany
-            // 
-            this.ddlCompany.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ddlCompany.FormattingEnabled = true;
-            this.ddlCompany.Location = new System.Drawing.Point(389, 506);
-            this.ddlCompany.Name = "ddlCompany";
-            this.ddlCompany.Size = new System.Drawing.Size(173, 20);
-            this.ddlCompany.TabIndex = 12;
-            // 
             // label14
             // 
             this.label14.AutoSize = true;
             this.label14.BackColor = System.Drawing.Color.Transparent;
             this.label14.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label14.ForeColor = System.Drawing.Color.White;
-            this.label14.Location = new System.Drawing.Point(40, 544);
+            this.label14.Location = new System.Drawing.Point(349, 506);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(84, 14);
             this.label14.TabIndex = 13;
@@ -302,7 +278,7 @@
             // 
             this.ddlType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ddlType.FormattingEnabled = true;
-            this.ddlType.Location = new System.Drawing.Point(121, 543);
+            this.ddlType.Location = new System.Drawing.Point(430, 505);
             this.ddlType.Name = "ddlType";
             this.ddlType.Size = new System.Drawing.Size(112, 20);
             this.ddlType.TabIndex = 14;
@@ -311,9 +287,9 @@
             // 
             this.ddlActivity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ddlActivity.FormattingEnabled = true;
-            this.ddlActivity.Location = new System.Drawing.Point(120, 504);
+            this.ddlActivity.Location = new System.Drawing.Point(119, 504);
             this.ddlActivity.Name = "ddlActivity";
-            this.ddlActivity.Size = new System.Drawing.Size(173, 20);
+            this.ddlActivity.Size = new System.Drawing.Size(145, 20);
             this.ddlActivity.TabIndex = 16;
             this.ddlActivity.SelectedIndexChanged += new System.EventHandler(this.ddlActivity_SelectedIndexChanged);
             this.ddlActivity.SelectionChangeCommitted += new System.EventHandler(this.ddlActivity_SelectionChangeCommitted);
@@ -336,7 +312,7 @@
             this.label16.AutoSize = true;
             this.label16.BackColor = System.Drawing.Color.Transparent;
             this.label16.ForeColor = System.Drawing.Color.Red;
-            this.label16.Location = new System.Drawing.Point(294, 509);
+            this.label16.Location = new System.Drawing.Point(267, 509);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(11, 12);
             this.label16.TabIndex = 17;
@@ -347,29 +323,18 @@
             this.label17.AutoSize = true;
             this.label17.BackColor = System.Drawing.Color.Transparent;
             this.label17.ForeColor = System.Drawing.Color.Red;
-            this.label17.Location = new System.Drawing.Point(235, 547);
+            this.label17.Location = new System.Drawing.Point(545, 509);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(11, 12);
             this.label17.TabIndex = 18;
             this.label17.Text = "*";
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.BackColor = System.Drawing.Color.Transparent;
-            this.label18.ForeColor = System.Drawing.Color.Red;
-            this.label18.Location = new System.Drawing.Point(563, 510);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(11, 12);
-            this.label18.TabIndex = 19;
-            this.label18.Text = "*";
             // 
             // label19
             // 
             this.label19.AutoSize = true;
             this.label19.BackColor = System.Drawing.Color.Transparent;
             this.label19.ForeColor = System.Drawing.Color.Red;
-            this.label19.Location = new System.Drawing.Point(393, 555);
+            this.label19.Location = new System.Drawing.Point(361, 563);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(131, 12);
             this.label19.TabIndex = 20;
@@ -383,15 +348,12 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(760, 642);
             this.Controls.Add(this.label19);
-            this.Controls.Add(this.label18);
             this.Controls.Add(this.label17);
             this.Controls.Add(this.label16);
             this.Controls.Add(this.ddlActivity);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.ddlType);
             this.Controls.Add(this.label14);
-            this.Controls.Add(this.ddlCompany);
-            this.Controls.Add(this.label12);
             this.Controls.Add(this.buttonX3);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.label11);
@@ -440,15 +402,12 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label13;
         private DevComponents.DotNetBar.ButtonX buttonX3;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.ComboBox ddlCompany;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.ComboBox ddlType;
         private System.Windows.Forms.ComboBox ddlActivity;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label label19;
     }
 }

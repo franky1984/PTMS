@@ -44,6 +44,8 @@ namespace IdentityCard
         /// </summary>
         void init()
         {
+            string sql = "select F_OrderId+','+F_EmployerId AS id from F_Base_TempWorkOrder t INNER JOIN LR_Base_User u ON t.f_createuser=u.f_userid  INNER JOIN LR_WF_ProcessInstance c ON t.F_OrderId=c.f_id AND c.F_IsFinished=1 AND (SELECT COUNT(*) FROM LR_WF_TaskHistory WHERE F_ProcessId=c.f_id AND F_Result = 2)=0 WHERE u.F_CompanyId='" + ConfigurationManager.AppSettings[ "company" ] + "'";
+
             DataTable activity   = SqlDbHelper.ExecuteDataTable("SELECT F_OrderId,F_MeetingName FROM F_Base_TempWorkOrder");
             DataRow dr           = activity.NewRow();
             dr["F_OrderId"]      = "0";
@@ -51,16 +53,7 @@ namespace IdentityCard
             activity.Rows.InsertAt(dr, 0);
             ddlActivity.DataSource    = activity;
             ddlActivity.DisplayMember = "F_MeetingName";
-            ddlActivity.ValueMember   = "F_OrderId";
-
-            DataTable company        = SqlDbHelper.ExecuteDataTable("SELECT F_EmployerId,F_EmployerName FROM F_Base_Employer");
-            dr                       = company.NewRow();
-            dr["F_EmployerId"]       = "0";
-            dr["F_EmployerName"]     = "——请选择——";
-            company.Rows.InsertAt(dr, 0);
-            ddlCompany.DataSource    = company;
-            ddlCompany.DisplayMember = "F_EmployerName";
-            ddlCompany.ValueMember   = "F_EmployerId";
+            ddlActivity.ValueMember   = "id";
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -442,8 +435,7 @@ namespace IdentityCard
         /// <param name="e"></param>
         private void buttonX3_Click_1(object sender, EventArgs e)
         {
-            string company  = ddlCompany.SelectedValue.ToString();
-            string activity = ddlActivity.SelectedValue.ToString();
+            string activity = ddlActivity.SelectedValue.ToString().Split( ',' )[ 0 ];
             string type     = string.Empty;
 
             try
@@ -458,10 +450,6 @@ namespace IdentityCard
             if (activity == "0")
             {
                 MessageBox.Show("请选择一个活动！");
-            }
-            else if ( company == "0" )
-            {
-                MessageBox.Show("请选择一个劳务公司！");
             }
             else if (type == "0")
             {
@@ -480,7 +468,7 @@ namespace IdentityCard
                 DataTable userInfo = SqlDbHelper.ExecuteDataTable("SELECT f_userid,F_RealName,F_Gender FROM MLR_Base_TempUser WHERE F_Identity=@identity", list.ToArray() );
 
                 list = new List<SqlParameter>();
-                list.Add(new SqlParameter("@orderID", ddlActivity));
+                list.Add(new SqlParameter("@orderID", activity ) );
                 list.Add(new SqlParameter("@userID", userInfo.Rows[ 0 ]["f_userid"].ToString() ));
 
                 int num = Convert.ToInt32( SqlDbHelper
@@ -495,7 +483,7 @@ namespace IdentityCard
                 else
                 {
                     list.Add(new SqlParameter("@f_id", Guid.NewGuid().ToString()));
-                    list.Add(new SqlParameter("@f_employerid", company));
+                    list.Add(new SqlParameter("@f_employerid", ddlActivity.SelectedValue.ToString().Split( ',' )[ 1 ] ) );
                     list.Add(new SqlParameter("@f_categoryid", type));
 
                     //添加小时工与活动对应关系
@@ -503,7 +491,7 @@ namespace IdentityCard
 
                     //--------------------------往打卡记录表中初始经小时工打卡记录------------------------------
                     list = new List<SqlParameter>();
-                    list.Add(new SqlParameter("@orderID", ddlActivity));
+                    list.Add(new SqlParameter("@orderID", activity ) );
 
                     DataTable dt       = SqlDbHelper.ExecuteDataTable( "SELECT * FROM F_Base_TempWorkOrder WHERE f_orderid=@orderID", list.ToArray() );
                     DateTime startTime = DateTime.Parse(dt.Rows[0]["F_StartTime"].ToString());
@@ -540,7 +528,7 @@ namespace IdentityCard
         private void ddlActivity_SelectionChangeCommitted(object sender, EventArgs e)
         {
             //根据选择的活动只获取这个活动下的工种
-            DataTable type = SqlDbHelper.ExecuteDataTable("SELECT DISTINCT t.F_CategoryId,t.F_CategoryName FROM LR_Base_Category t INNER JOIN F_Base_TempWorkOrderCategoryDetail c ON t.F_CategoryId=c.F_CategoryName WHERE c.F_TempWorkOrderId='" + ddlActivity.SelectedValue.ToString() + "'");
+            DataTable type = SqlDbHelper.ExecuteDataTable( "SELECT DISTINCT t.F_CategoryId,t.F_CategoryName FROM LR_Base_Category t INNER JOIN F_Base_TempWorkOrderCategoryDetail c ON t.F_CategoryId=c.F_CategoryName WHERE c.F_TempWorkOrderId='" + ddlActivity.SelectedValue.ToString().Split( ',' )[ 0 ] + "'" );
 
             DataRow dr = type.NewRow();
             dr["F_CategoryId"] = "0";
